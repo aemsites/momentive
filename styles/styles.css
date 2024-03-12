@@ -23,7 +23,7 @@
   --dark-gray: #333333;
   --text-color: black;
   /* Used in the header and footer as a background color and as a font color in the top nav row, and other sections as a background color */
-  --navy-blue: #212529;
+  --navy-blue: #1a355e;
   /* Used in CTA buttons */
   --orange: #fd8e02;
 
@@ -147,23 +147,37 @@ a.button:any-link, button {
   box-sizing: border-box;
   text-decoration: none;
   border: 2px solid transparent;
-  padding: 5px 30px;
   text-align: center;
   font-style: normal;
   font-weight: 600;
   cursor: pointer;
   color: var(--background-color);
-  background-color: var(--link-color);
   margin: 16px 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  border-radius: 30px;
+
+  background-color: var(--orange);
+  padding: 3px 40px;
+  border-radius: 12px;
+  margin: 16px 0;
 }
 
 a.button:hover, a.button:focus, button:hover, button:focus  {
-  background-color: var(--link-hover-color);
+  filter: brightness(120%);
   cursor: pointer;
+}
+
+.navy a.button.secondary, .dark a.button.secondary,
+.navy button.secondar, .dark button.secondary {  
+  border-color: var(--background-color);
+  color: var(--background-color);
+}
+
+.navy a.button.secondary:hover, .dark a.button.secondary:hover,
+.navy button.secondary:hover, .dark button.secondary:hover {  
+  filter: none;
+  border-color: rgba(255, 255, 255, 0.6);
 }
 
 button:disabled, button:disabled:hover {
@@ -225,31 +239,4 @@ main .section.dark {
 main .section.navy {
   background-color: var(--navy-blue);
   color: var(--background-color);
-}
-
-/* cta button styles */
-a.cta {
-  background-color: var(--orange);
-  color: var(--background-color);
-  padding: 5px 50px 15px 40px;
-  border-radius: 12px;
-  display: inline-block;
-  text-decoration: none;
-  font-weight: 600;
-  margin: 16px 0;
-}
-
-a.cta:hover {
-  filter: brightness(110%);
-}
-
-.navy a.cta.secondary:hover, .dark a.cta.secondary {
-  filter: none;
-  border-color: rgba(255, 255, 255, 0.6);
-}
-
-.navy a.cta.secondary, .dark a.cta.secondary {
-  background-color: none;
-  color: var(--background-color);
-  border: 2px solid currentcolor;
 }
