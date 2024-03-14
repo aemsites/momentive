@@ -15,15 +15,20 @@
   --link-color: black;
   --link-hover-color: black;
   --background-color: white;
+
   /* used in the header and disclaimer at the bottom of the page */
   --light-gray: #d0d0ce;
+
   /* used in darker-color sections, and at very bottom of the page as the text color */
   --med-gray: #65646a;
+
   /* Used as the text color in the disclaimer at the bottom of the page */
-  --dark-gray: #333333;
+  --dark-gray: #333;
   --text-color: black;
+
   /* Used in the header and footer as a background color and as a font color in the top nav row, and other sections as a background color */
   --navy-blue: #1a355e;
+
   /* Used in CTA buttons */
   --orange: #fd8e02;
 
@@ -156,16 +161,20 @@ a.button:any-link, button {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-
   background-color: var(--orange);
   padding: 3px 40px;
   border-radius: 12px;
-  margin: 16px 0;
 }
 
 a.button:hover, a.button:focus, button:hover, button:focus  {
   filter: brightness(120%);
   cursor: pointer;
+}
+
+a.button.secondary, button.secondary {
+  background-color: unset;
+  border: 2px solid currentcolor;
+  color: var(--text-color)
 }
 
 .navy a.button.secondary, .dark a.button.secondary,
@@ -177,18 +186,12 @@ a.button:hover, a.button:focus, button:hover, button:focus  {
 .navy a.button.secondary:hover, .dark a.button.secondary:hover,
 .navy button.secondary:hover, .dark button.secondary:hover {  
   filter: none;
-  border-color: rgba(255, 255, 255, 0.6);
+  border-color: rgb(255 255 255 / 60%)
 }
 
 button:disabled, button:disabled:hover {
   background-color: var(--light-gray);
   cursor: unset;
-}
-
-a.button.secondary, button.secondary {
-  background-color: unset;
-  border: 2px solid currentcolor;
-  color: var(--text-color)
 }
 
 main img {
