@@ -1,6 +1,7 @@
 /* header and nav layout */
 header .nav-wrapper {
-  background-color: var(--background-color);
+  background-color: var(--navy-blue);
+  color: var(--background-color);
   width: 100%;
   z-index: 2;
   position: fixed;
@@ -15,30 +16,27 @@ header nav {
   align-items: center;
   gap: 0 2em;
   margin: auto;
-  max-width: 1264px;
+  max-width: 100%;
   height: var(--nav-height);
-  padding: 0 1rem;
+  padding: 0;
   font-family: var(--body-font-family);
 }
 
-header nav[aria-expanded="true"] {
+/* header nav[aria-expanded="true"] {
   grid-template:
     'hamburger brand' var(--nav-height)
     'sections sections' 1fr
     'tools tools' var(--nav-height) / auto 1fr;
   overflow-y: auto;
   min-height: 100vh;
-}
+} */
 
 @media (width >= 600px) {
-  header nav {
-    padding: 0 2rem;
-  }
 }
 
 @media (width >= 900px) {
   header nav {
-    display: flex;
+    /* display: flex; */
     justify-content: space-between;
   }
 
@@ -158,19 +156,24 @@ header nav .nav-sections {
   flex: 1 1 auto;
   display: none;
   visibility: hidden;
-  background-color: var(--overlay-color);
+  background-color: var(--light-gray);
+  color: var(--navy-blue);
+  text-transform: uppercase;
+  font-family: var(--avenir-bold);
+  font-weight: 600;
 }
 
 header nav[aria-expanded="true"] .nav-sections {
   display: block;
   visibility: visible;
   align-self: start;
+  padding: 0.7em 0;
 }
 
 header nav .nav-sections ul  {
   list-style: none;
   padding-left: 0;
-  font-size: var(--body-font-size-s);
+  font-size: var(--body-font-size-xs);
   font-weight: 500;
 }
 
@@ -227,13 +230,17 @@ header nav .nav-sections ul > li > ul > li {
     display: flex;
     gap: 2em;
     margin: 0;
-    font-size: var(--body-font-size-xs);
+    font-size: var(--body-font-size-xxs);
   }
 
   header nav .nav-sections .default-content-wrapper > ul > li {
     flex: 0 1 auto;
     position: relative;
-    font-weight: 500;
+    font-weight: 600;
+  }
+
+  header nav .nav-sections .default-content-wrapper > ul > li::before {
+    content: '+';
   }
 
   header nav .nav-sections .default-content-wrapper > ul > li > ul {
@@ -272,4 +279,5 @@ header nav .nav-sections ul > li > ul > li {
 /* tools */
 header nav .nav-tools {
   grid-area: tools;
+  padding-right: 2rem;
 }
