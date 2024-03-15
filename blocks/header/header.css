@@ -31,9 +31,6 @@ header nav {
   min-height: 100vh;
 } */
 
-@media (width >= 600px) {
-}
-
 @media (width >= 900px) {
   header nav {
     /* display: flex; */
@@ -161,6 +158,7 @@ header nav .nav-sections {
   text-transform: uppercase;
   font-family: var(--avenir-bold);
   font-weight: 600;
+  font-size: var(--body-font-size-xxs);
 }
 
 header nav[aria-expanded="true"] .nav-sections {
@@ -227,10 +225,11 @@ header nav .nav-sections ul > li > ul > li {
   }
 
   header nav .nav-sections ul {
-    display: flex;
-    gap: 2em;
-    margin: 0;
+    padding: 0.6em 2em;
     font-size: var(--body-font-size-xxs);
+    display: flex;
+    justify-content: space-between;
+    margin: auto;
   }
 
   header nav .nav-sections .default-content-wrapper > ul > li {
