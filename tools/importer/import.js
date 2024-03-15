@@ -1,31 +1,24 @@
-/** Create Technical Products block */
-const createTechnicalProductsBlock = (document) => {
+const createTechnicalDocumentsBlock = (document) => {
     const techHighlightWrapper = document.querySelector('.grid.techhilighte-wrapp');
-    if (techHighlightWrapper && techHighlightWrapper.querySelectorAll('a').length > 0) {
-        const cells = [['Technical Products']]; // Title row
+    if (techHighlightWrapper) {
+        const cells = [['Technical Documents']];
 
-        techHighlightWrapper.querySelectorAll('ul').forEach(ul => {
-            let content = '';
-            const title = ul.querySelector('h4') ? ul.querySelector('h4').outerHTML : '';
-            content += title; // Add the title as HTML, but not as a list item
-
-            // Start an unordered list for the links
-            let linksContent = '<ul>';
-            const links = ul.querySelectorAll('a');
-            links.forEach(link => {
-                // Wrap each link in a list item tag to create a bullet point
-                linksContent += '<li>' + link.outerHTML + '</li>';
-            });
-            linksContent += '</ul>'; // Close the unordered list
-
-            // Append the links list to the content after the title
-            content += linksContent;
-
-            cells.push([content]); // Add the concatenated content as a new row with HTML
+        // Start an unordered list for all links
+        let linksContent = '<ul>';
+        const links = techHighlightWrapper.querySelectorAll('a');
+        links.forEach(link => {
+            // For each link, create a list item regardless of its type (SDS or Technical Data Sheet)
+            linksContent += `<li><a href="${link.href}" target="_blank">${link.textContent.trim()}</a></li>`;
         });
+        linksContent += '</ul>'; // Close the unordered list
+
+        // Add the links list as a new row in the cells array
+        cells.push([linksContent]);
 
         const table = WebImporter.DOMUtils.createTable(cells, document);
-        techHighlightWrapper.replaceWith(table); // Replace the original section with the new table
+
+        // Replace the original tech highlights wrapper with the new table
+        techHighlightWrapper.replaceWith(table);
     }
 };
 
@@ -84,47 +77,37 @@ const createProductLiteratureBlock = (document) => {
 
 const createMetadata = (main, document) => {
     const meta = {};
-  
+
+    // General metadata extraction
     const title = document.querySelector('title');
     if (title) {
       meta.Title = title.textContent.replace(/[\n\t]/gm, '');
     }
-  
+
     const desc = document.querySelector('[property="og:description"]');
     if (desc) {
       meta.Description = desc.content;
     }
-  
+
     const img = document.querySelector('[property="og:image"]');
     if (img && img.content) {
       const el = document.createElement('img');
       el.src = img.content;
       meta.Image = el;
     }
-  
-    const block = WebImporter.Blocks.getMetadataBlock(document, meta);
-    main.append(block);
-  
-    return meta;
-  };
 
-/** Create Page Metadata block */
-const createPageMetadataBlock = (main, document) => {
-    const cells = [['Page Metadata']]; // Title row
+    const categoryElement = document.querySelector('[property="productCategory_string"]');
+    if (categoryElement && categoryElement.content) {
+      const firstCategory = categoryElement.content.split(',')[0].trim();
+      meta.Template = firstCategory;
+    }
 
-    // Get the page title
-    const pageTitleElement = document.querySelector('.page-header');
-    const pageTitle = pageTitleElement ? pageTitleElement.textContent : '';
-    cells.push(['Title', pageTitle]);
-
-    // Initialize brand and industry as empty strings
+    // Initialize brand and industry as empty strings and then try to extract them
     let brand = '';
     let industry = '';
 
-    // Get all columns within the metadata section
+    // Extracting brand and industry from their respective sections
     const metadataColumns = document.querySelectorAll('.table-grid-md.grid-bordered.text-white-sm.text-center-lg.equal-row .table-grid-col');
-
-    // Iterate through each column to find brand and industry
     metadataColumns.forEach((column, index) => {
         const h6Element = column.querySelector('h6');
         if (h6Element && h6Element.textContent.includes('Explore:')) {
@@ -137,20 +120,20 @@ const createPageMetadataBlock = (main, document) => {
         }
     });
 
-    // Add brand and industry to the cells if available
-    if (brand) cells.push(['Brand', brand]);
-    if (industry) cells.push(['Industry', industry]);
+    if (brand) meta.Brand = brand;
+    if (industry) meta.Industry = industry;
 
     // Remove the brand and industry section from the DOM
     const brandAndIndustrySection = document.querySelector('.table-grid-md.grid-bordered.text-white-sm.text-center-lg.equal-row');
     brandAndIndustrySection?.remove();
 
-    // Create the table and append it to the main element only if metadata is available
-    if (pageTitle || brand || industry) {
-        const table = WebImporter.DOMUtils.createTable(cells, document);
-        main.appendChild(table);
-    }
+    // Create and append the metadata block if any metadata was found
+    const block = WebImporter.Blocks.getMetadataBlock(document, meta);
+    main.append(block);
+
+    return meta;
 };
+
 
   export default {
     /**
@@ -187,11 +170,10 @@ const createPageMetadataBlock = (main, document) => {
       // Use helper methods to create and append various blocks to the main element
       // createProductHeroBlock(main, document);
       // Add other blocks creation calls here, e.g., createTabs(main, document);
-      createTechnicalProductsBlock(document);
+      createTechnicalDocumentsBlock(document);
       createRelatedProductsBlock(document);
       createProductLiteratureBlock(document);
       createMetadata(main, document);
-      createPageMetadataBlock(main, document);
   
       return main;
     },
