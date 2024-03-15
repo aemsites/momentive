@@ -160,7 +160,6 @@ header nav .nav-sections {
   color: var(--navy-blue);
   text-transform: uppercase;
   font-family: var(--avenir-bold);
-  font-size: var(--body-font-size-xxs);
   font-weight: 600;
 }
 
@@ -168,12 +167,13 @@ header nav[aria-expanded="true"] .nav-sections {
   display: block;
   visibility: visible;
   align-self: start;
+  padding: 0.7em 0;
 }
 
 header nav .nav-sections ul  {
   list-style: none;
   padding-left: 0;
-  font-size: var(--body-font-size-s);
+  font-size: var(--body-font-size-xs);
   font-weight: 500;
 }
 
@@ -230,13 +230,13 @@ header nav .nav-sections ul > li > ul > li {
     display: flex;
     gap: 2em;
     margin: 0;
-    font-size: var(--body-font-size-xs);
+    font-size: var(--body-font-size-xxs);
   }
 
   header nav .nav-sections .default-content-wrapper > ul > li {
     flex: 0 1 auto;
     position: relative;
-    font-weight: 500;
+    font-weight: 600;
   }
 
   header nav .nav-sections .default-content-wrapper > ul > li::before {
