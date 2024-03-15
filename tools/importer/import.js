@@ -75,7 +75,7 @@ const createProductLiteratureBlock = (document) => {
     }
 };
 
-const createMetadata = (main, document) => {
+const createMetadata = (main, document, url) => {
     const meta = {};
 
     // General metadata extraction
@@ -96,10 +96,19 @@ const createMetadata = (main, document) => {
       meta.Image = el;
     }
 
-    const categoryElement = document.querySelector('[property="productCategory_string"]');
-    if (categoryElement && categoryElement.content) {
-      const firstCategory = categoryElement.content.split(',')[0].trim();
-      meta.Template = firstCategory;
+    const category = document.querySelector('[property="productCategory_string"]');
+    console.log('category', category);
+    if (category) {
+      meta.Category = category.content;
+    }
+
+    // Extracting template from the URL string
+    const parsedUrl = new URL(url); // Parse the URL string
+    const pathSegments = parsedUrl.pathname.split('/').filter(segment => segment.length > 0);
+    // Assuming the template is always in the format of 'categories/<category-name>' or 'industries/<industry-name>'
+    if (pathSegments.length >= 3) { // Adjusting for the additional segment in the path ('en-us')
+      const template = `${pathSegments[1]}/${pathSegments[2]}`;
+      meta.Template = template;
     }
 
     // Initialize brand and industry as empty strings and then try to extract them
@@ -173,7 +182,7 @@ const createMetadata = (main, document) => {
       createTechnicalDocumentsBlock(document);
       createRelatedProductsBlock(document);
       createProductLiteratureBlock(document);
-      createMetadata(main, document);
+      createMetadata(main, document, url);
   
       return main;
     },
@@ -193,134 +202,3 @@ const createMetadata = (main, document) => {
     }) => WebImporter.FileUtils.sanitizePath(new URL(url).pathname.replace(/\.html$/, '').replace(/\/$/, '')),
     
   };
-
-  
-
-
-
-
-
-  /** Create Product Hero block */
-// const createProductHeroBlock = (main, document) => {
-//     // Extract the product title
-//     const productTitle = document.querySelector('.page-header').textContent;
-
-//     // More specific selector for the subtitle, targeting the <p> tag directly
-//     const productSubtitle = document.querySelector('.product-detail-top .text-caps').textContent.trim();
-
-//     // Extract the description, ensuring it's separate from the subtitle
-//     const productDescriptionParagraphs = document.querySelectorAll('.product-detail-top p:not(.text-caps)');
-//     const productDescription = Array.from(productDescriptionParagraphs)
-//                                     .map(p => p.textContent.trim())
-//                                     .filter(text => text.length > 0)
-//                                     .join('\n\n');
-
-//     // SDS and Technical Data Sheet links
-//     const sdsLink = document.querySelector('.sdsDocument').href;
-//     const tdsLink = document.querySelector('.gatedContentLink').href;
-
-//     // Check for a brochure
-//     const brochureDiv = document.querySelector('#div_brochure');
-//     const brochureExists = brochureDiv && brochureDiv.getAttribute('visible') !== false;
-//     const brochureTitle = brochureExists ? brochureDiv.querySelector('h5').textContent : '';
-//     const brochureImage = brochureExists ? brochureDiv.querySelector('img').src : '';
-//     const brochureDownloadLink = brochureExists ? brochureDiv.querySelector('a').href : '';
-
-//     // Construct the table cells for the Product Hero block, including brochure if exists
-//     const cells = [
-//         [brochureExists ? 'Product Hero (Brochure)' : 'Product Hero'],
-//         ['Title', productTitle],
-//         ['Subtitle', productSubtitle],
-//         ['Description', productDescription],
-//         ['Safety Data Sheets', sdsLink],
-//         ['Technical Data Sheets', tdsLink],
-//     ];
-
-//     // Add brochure information if exists
-//     if (brochureExists) {
-//         cells.push(['Brochure Title', brochureTitle]);
-//         cells.push(['Brochure Image', brochureImage]);
-//         cells.push(['Brochure Download', brochureDownloadLink]);
-//     }
-
-//     // Create the table and append it to the main element
-//     const table = WebImporter.DOMUtils.createTable(cells, document);
-//     main.appendChild(table);
-// };
-
-/** Create Related Products block */
-// const createRelatedProductsBlock = (main, document) => {
-//     const relatedProducts = [
-//         {
-//             id: 'colFormulation',
-//             prefix: 'formulationProduct',
-//             title: 'GRADES/FORMULATION',
-//             description: 'Similar products that vary by small adjustments to performance properties; but, provide the same function or benefit.'
-//         },
-//         {
-//             id: 'colComplementary',
-//             prefix: 'complimentaryProduct',
-//             title: 'Complementary Products',
-//             description: 'Similar products that may enhance results or work well together.'
-//         },
-//         {
-//             id: 'colApplication',
-//             prefix: 'similarApplicationProduct',
-//             title: 'Similar Application',
-//             description: 'Similar products that have similar capabilities or can be applied to similar needs.'
-//         }
-//     ];
-
-//     // Initialize cells array with the block title
-//     const cells = [['Related Products']];
-
-//     relatedProducts.forEach(product => {
-//         const productElement = document.getElementById(product.id);
-//         if (productElement) {
-//             // Add product title and description with prefixes
-//             cells.push([`${product.prefix}Title`, product.title]);
-//             cells.push([`${product.prefix}Description`, product.description]);
-
-//             // Extract product links, titles and URLs
-//             const links = Array.from(productElement.querySelectorAll('.links-related-products a'));
-//             const linkTitles = links.map(link => link.textContent).join(', ');
-//             const linkUrls = links.map(link => link.href).join(', ');
-
-//             // Add link titles and URLs with prefixes as separate rows
-//             if (links.length > 0) {
-//                 cells.push([`${product.prefix}LinkTitles`, linkTitles]);
-//                 cells.push([`${product.prefix}LinkURLs`, linkUrls]);
-//             }
-//         }
-//     });
-
-//     // Create the table and append it to the main element if there are related products
-//     if (cells.length > 1) { // Considering the block title already added
-//         const table = WebImporter.DOMUtils.createTable(cells, document);
-//         main.appendChild(table);
-//     }
-// };
-  
-/** Create Product Literature block */
-// const createProductLiteratureBlock = (main, document) => {
-//     // Check if the Product Literature section exists
-//     const literatureSection = document.querySelector('.table-grid-lg.grid-bordered.bg-gray-lightest-sm');
-//     if (literatureSection) {
-//         const links = literatureSection.querySelectorAll('.mydoc .gatedContentLink');
-        
-//         // Extract link names and URLs
-//         const linkNames = Array.from(links).map(link => link.textContent.trim()).join(', ');
-//         const linkURLs = Array.from(links).map(link => link.href).join(', ');
-
-//         // Construct the cells for the Product Literature block
-//         const cells = [
-//             ['Product Literature'],
-//             ['Link Names', linkNames],
-//             ['Link URLs', linkURLs]
-//         ];
-
-//         // Create the table and append it to the main element
-//         const table = WebImporter.DOMUtils.createTable(cells, document);
-//         main.appendChild(table);
-//     }
-// };
