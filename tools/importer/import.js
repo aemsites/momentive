@@ -183,6 +183,8 @@ export default {
     // eslint-disable-next-line no-unused-vars
     document,
     url,
+    html,
+    params,
   }) => {
     // define the main element: the one that will be transformed to Markdown
     const main = document.body;
@@ -224,7 +226,10 @@ export default {
    */
   generateDocumentPath: ({
     // eslint-disable-next-line no-unused-vars
+    document,
     url,
+    html,
+    params,
   }) =>
     WebImporter.FileUtils.sanitizePath(
       new URL(url).pathname.replace(/\.html$/, '').replace(/\/$/, ''),
