@@ -5,29 +5,32 @@ const createTechnicalDocumentsBlock = (main, document) => {
   if (techHighlightWrapper) {
     const cells = [['Documents (Technical)']];
 
-    // Start an unordered list for all links
-    let linksContent = '<ul>';
+    // Initialize a string to hold all links
+    let linksContent = '';
     const links = techHighlightWrapper.querySelectorAll('a');
-    links.forEach((link) => {
-      // For each link, create a list item regardless of its type (SDS or Technical Data Sheet)
-      linksContent += `<li><a href="${
+    links.forEach((link, index) => {
+      // For each link, append it to the linksContent string
+      // Add a line break after each link, except the last one
+      linksContent += `<a href="${
         link.href
-      }" target="_blank">${link.textContent.trim()}</a></li>`;
+      }" target="_blank">${link.textContent.trim()}</a>${
+        index < links.length - 1 ? '<br>' : ''
+      }`;
     });
-    linksContent += '</ul>'; // Close the unordered list
 
-    // Add the links list as a new row in the cells array
+    // Add the links string as a new row in the cells array
     cells.push([linksContent]);
 
     const table = WebImporter.DOMUtils.createTable(cells, document);
 
+    // Append the table to the main element and remove the original wrapper
     main.append(table);
     techHighlightWrapper.remove();
   }
 };
 
 /** Create Related Products block */
-const createRelatedProductsBlock = (document) => {
+const createRelatedProductsBlock = (main, document) => {
   const relatedProductsDiv = document.querySelector('#divRelatedProducts');
   if (
     relatedProductsDiv &&
@@ -57,7 +60,7 @@ const createRelatedProductsBlock = (document) => {
       });
 
     const table = WebImporter.DOMUtils.createTable(cells, document);
-    relatedProductsDiv.replaceWith(table); // Replace the original section with the new table
+    main.append(table);
   }
   relatedProductsDiv?.remove();
 };
@@ -203,7 +206,7 @@ export default {
     // createProductHeroBlock(main, document);
     // Add other blocks creation calls here, e.g., createTabs(main, document);
     createTechnicalDocumentsBlock(main, document);
-    createRelatedProductsBlock(document);
+    createRelatedProductsBlock(main, document);
     createProductDocumentsBlock(main, document);
     createMetadata(main, document, url);
 
