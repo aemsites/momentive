@@ -1,3 +1,73 @@
+// List of URL paths that map to the "Product" template
+const productPaths = [
+  '/en-us/categories/urethane-additives',
+  '/en-us/categories/polyurethane-additives',
+  '/en-us/industries/furniture-bedding-and-carpets',
+  '/en-us/industries/consumer-goods',
+  '/en-us/categories/urethane-additives/niax-catalyst-lc-5636',
+  '/en-us/categories/urethane-additives/niax-catalyst-c-41',
+  '/en-us/categories/polyurethane-additives/geocelltm-additive-gm-225',
+  '/en-us/categories/polyurethane-additives/geocelltm-additive-gm-280',
+  '/en-us/categories/polyurethane-additives/geocelltm-gm-hrs',
+  '/en-us/categories/polyurethane-additives/geocelltm-silicone-l-450',
+  '/en-us/categories/polyurethane-additives/geocelltm-silicone-l-800',
+  '/en-us/categories/polyurethane-additives/process-and-foam-modifiers/geolitetm-modifier-206',
+  '/en-us/industries/furniture-bedding-and-carpets/geolite-modifier-91',
+  '/en-us/categories/urethane-additives/niax-catalyst-ef-708',
+  '/en-us/categories/urethane-additives/niax-catalyst-a-107',
+  '/en-us/categories/urethane-additives/niax-additive-ra-1',
+  '/en-us/categories/urethane-additives/niax-additive-ap-01',
+  '/en-us/categories/urethane-additives/niax-catalyst-a-1',
+  '/en-us/categories/urethane-additives/niax-catalyst-a-33',
+  '/en-us/categories/urethane-additives/niax-catalyst-a-400',
+  '/en-us/categories/urethane-additives/niax-catalyst-a-537',
+  '/en-us/industries/consumer-goods/niaxtm-catalyst-a-440',
+  '/en-us/categories/polyurethane-additives/niax-catalyst-ef-150',
+  '/en-us/categories/polyurethane-additives/catalysts/niaxtm-catalyst-ef-100s',
+  '/en-us/categories/urethane-additives/niax-silicone-l-3639',
+  '/en-us/categories/polyurethane-additives/flexible-slabstock-foams/niax-catalyst-ef-350',
+  '/en-us/categories/urethane-additives/niax-catalyst-k-zero-g',
+  '/en-us/categories/polyurethane-additives/flexible-slabstock-foams/niax-silicone-l-838',
+  '/en-us/categories/polyurethane-additives/flexible-slabstock-foams/niaxtm-silicone-l-422',
+  '/en-us/categories/polyurethane-additives/flexible-slabstock-foams/niaxtm-silicone-l-818',
+  '/en-us/categories/polyurethane-additives/flexible-slabstock-foams/niaxtm-silicone-l-820',
+  '/en-us/categories/polyurethane-additives/flexible-slabstock-foams/niaxtm-silicone-l-895',
+  '/en-us/industries/consumer-goods/niaxtm-silicone-l-417',
+  '/en-us/categories/polyurethane-additives/niax-silicone-l-894',
+  '/en-us/categories/polyurethane-additives/niax-flame-lamination-additive-fle-200lf',
+  '/en-us/categories/polyurethane-additives/niaxtm-catalyst-ef-700',
+  '/en-us/categories/urethane-additives/niax-silicone-l-627',
+  '/en-us/categories/urethane-additives/niax-color-stabilizer-cs-22lf',
+  '/en-us/categories/urethane-additives/niax-silicone-l-6638',
+  '/en-us/categories/urethane-additives/niax-silicone-l-6642',
+  '/en-us/categories/urethane-additives/niax-silicone-l-1507',
+  '/en-us/categories/urethane-additives/niax-silicone-l-5302',
+  '/en-us/categories/urethane-additives/niax-silicone-l-5617',
+  '/en-us/categories/polyurethane-additives/flexible-slabstock-foams/niaxtm-silicone-y-16420',
+  '/en-us/categories/polyurethane-additives/niaxtm-catalyst-ef-600s',
+  '/en-us/categories/urethane-additives/niax-silicone-l-5309',
+  '/en-us/categories/urethane-additives/niax-silicone-l-3415',
+  '/en-us/categories/urethane-additives/niax-silicone-l-6186',
+  '/en-us/categories/urethane-additives/niax-silicone-l-6884',
+  '/en-us/categories/urethane-additives/niax-catalyst-stannous-octoate',
+  '/en-us/categories/urethane-additives/niax-silicone-l-3416',
+  '/en-us/categories/urethane-additives/niax-catalyst-a-577',
+  '/en-us/categories/urethane-additives/niax-silicone-l-1500',
+  '/en-us/categories/urethane-additives/niax-silicone-l-2171',
+  '/en-us/categories/polyurethane-additives/niax-catalyst-ef-600',
+  '/en-us/categories/urethane-additives/niax-silicone-l-6633',
+  '/en-us/categories/urethane-additives/niax-silicone-l-5690',
+  '/en-us/categories/urethane-additives/niax-silicone-l-6635',
+  '/en-us/categories/urethane-additives/niax-silicone-l-5348',
+  '/en-us/categories/urethane-additives/niax-silicone-l-5111',
+  '/en-us/categories/urethane-additives/niax-silicone-l-1160',
+  '/en-us/categories/urethane-additives/niax-silicone-l-5360',
+  '/en-us/categories/urethane-additives/niax-silicone-l-6891',
+  '/en-us/categories/urethane-additives/niax-silicone-l-6164',
+  '/en-us/categories/polyurethane-additives/niax-silicone-l-6189',
+  '/en-us/order/find-a-tds',
+];
+
 const createTechnicalDocumentsBlock = (main, document) => {
   const techHighlightWrapper = document.querySelector(
     '.grid.techhilighte-wrapp',
@@ -96,32 +166,36 @@ const createProductDocumentsBlock = (main, document) => {
   }
 };
 
-const createMetadata = (main, document) => {
+const createMetadata = (main, document, url) => {
   const meta = {};
 
   // General metadata extraction
   const title = document.querySelector('title');
   if (title) {
-    meta.Title = title.textContent.replace(/[\n\t]/gm, '');
+    meta.Title = title.textContent.trim();
   }
-
-  // Set Template to "Product" if .product-detail-top exists, otherwise leave it blank
-  const productDetailExists = document.querySelector('.product-detail-top');
-  meta.Template = productDetailExists ? 'Product' : '';
 
   const desc = document.querySelector('[property="og:description"]');
   if (desc) {
-    meta.Description = desc.content;
+    meta.Description = desc.content.trim();
   }
 
   const img = document.querySelector('[property="og:image"]');
   if (img && img.content) {
-    const el = document.createElement('img');
-    el.src = img.content;
-    meta.Image = el;
+    meta.Image = img.content.trim();
   }
 
-  // Initialize brand and industry as empty strings and then try to extract them
+  // Extracting the path from the URL string
+  const parsedUrl = new URL(url);
+  const path = parsedUrl.pathname;
+
+  // Check if the current path matches any of the predefined product paths
+  const isProductPath = productPaths.some((productPath) =>
+    path.startsWith(productPath),
+  );
+  meta.Template = isProductPath ? 'Product' : '';
+
+  // Initialize brand and industry as empty strings
   let brand = '';
   let industry = '';
 
@@ -134,15 +208,14 @@ const createMetadata = (main, document) => {
     if (h6Element && h6Element.textContent.includes('Explore:')) {
       const text = h6Element.textContent.replace('Explore:', '').trim();
       if (index === 0) {
-        // Assuming the first column should contain the brand
-        brand = text;
+        brand = text; // Assuming the first column should contain the brand
       } else {
-        // Assuming any subsequent column could contain the industry
-        industry = text;
+        industry = text; // Any subsequent column could contain the industry
       }
     }
   });
 
+  // Assign brand and industry to meta if they are found
   if (brand) meta.Brand = brand;
   if (industry) meta.Industry = industry;
 
