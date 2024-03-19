@@ -63,7 +63,7 @@ const createRelatedProductsBlock = (document) => {
 };
 
 /** Create Product Literature block */
-const createProductDocumentsBlock = (document) => {
+const createProductDocumentsBlock = (main, document) => {
   const literatureSection = document.querySelector(
     '.table-grid-lg.grid-bordered.bg-gray-lightest-sm',
   );
@@ -85,7 +85,8 @@ const createProductDocumentsBlock = (document) => {
     }
 
     const table = WebImporter.DOMUtils.createTable(cells, document);
-    literatureSection.replaceWith(table); // Replace the original section with the new table
+    main.append(table);
+    literatureSection.remove();
   }
 };
 
@@ -203,7 +204,7 @@ export default {
     // Add other blocks creation calls here, e.g., createTabs(main, document);
     createTechnicalDocumentsBlock(main, document);
     createRelatedProductsBlock(document);
-    createProductDocumentsBlock(document);
+    createProductDocumentsBlock(main, document);
     createMetadata(main, document, url);
 
     return main;
