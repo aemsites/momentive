@@ -1,9 +1,9 @@
-const createTechnicalDocumentsBlock = (document) => {
+const createTechnicalDocumentsBlock = (main, document) => {
   const techHighlightWrapper = document.querySelector(
     '.grid.techhilighte-wrapp',
   );
   if (techHighlightWrapper) {
-    const cells = [['Technical Documents']];
+    const cells = [['Documents (Technical)']];
 
     // Start an unordered list for all links
     let linksContent = '<ul>';
@@ -21,8 +21,8 @@ const createTechnicalDocumentsBlock = (document) => {
 
     const table = WebImporter.DOMUtils.createTable(cells, document);
 
-    // Replace the original tech highlights wrapper with the new table
-    techHighlightWrapper.replaceWith(table);
+    main.append(table);
+    techHighlightWrapper.remove();
   }
 };
 
@@ -63,13 +63,13 @@ const createRelatedProductsBlock = (document) => {
 };
 
 /** Create Product Literature block */
-const createProductLiteratureBlock = (document) => {
+const createProductDocumentsBlock = (document) => {
   const literatureSection = document.querySelector(
     '.table-grid-lg.grid-bordered.bg-gray-lightest-sm',
   );
   if (literatureSection) {
     // Start with the block title
-    const cells = [['Product Literature']];
+    const cells = [['Documents (Product)']];
 
     // Initialize an empty string to hold all link HTML
     let allLinksHtml = '';
@@ -98,6 +98,10 @@ const createMetadata = (main, document, url) => {
     meta.Title = title.textContent.replace(/[\n\t]/gm, '');
   }
 
+  // Set Template to "Product" if .product-detail-top exists, otherwise leave it blank
+  const productDetailExists = document.querySelector('.product-detail-top');
+  meta.Template = productDetailExists ? 'Product' : '';
+
   const desc = document.querySelector('[property="og:description"]');
   if (desc) {
     meta.Description = desc.content;
@@ -108,27 +112,6 @@ const createMetadata = (main, document, url) => {
     const el = document.createElement('img');
     el.src = img.content;
     meta.Image = el;
-  }
-
-  const category = document.querySelector(
-    '[property="productCategory_string"]',
-  );
-  console.log('category', category);
-  if (category) {
-    meta.Category = category.content;
-  }
-
-  // Extracting template from the URL string
-  const parsedUrl = new URL(url); // Parse the URL string
-  const pathSegments = parsedUrl.pathname
-    .split('/')
-    .filter((segment) => segment.length > 0);
-  // Assuming the template is always in the format of
-  // 'categories/<category-name>' or 'industries/<industry-name>'
-  if (pathSegments.length >= 3) {
-    // Adjusting for the additional segment in the path ('en-us')
-    const template = `${pathSegments[1]}/${pathSegments[2]}`;
-    meta.Template = template;
   }
 
   // Initialize brand and industry as empty strings and then try to extract them
@@ -204,12 +187,23 @@ export default {
       '.scroll-anchor',
     ]);
 
+    const productDetailSection = document.querySelector(
+      '.product-detail-top p',
+    );
+    productDetailSection?.after(document.createElement('hr'));
+
+    const moreAboutSection = document.querySelector(
+      '.more-information-container p',
+    );
+
+    moreAboutSection?.after(document.createElement('hr'));
+
     // Use helper methods to create and append various blocks to the main element
     // createProductHeroBlock(main, document);
     // Add other blocks creation calls here, e.g., createTabs(main, document);
-    createTechnicalDocumentsBlock(document);
+    createTechnicalDocumentsBlock(main, document);
     createRelatedProductsBlock(document);
-    createProductLiteratureBlock(document);
+    createProductDocumentsBlock(document);
     createMetadata(main, document, url);
 
     return main;
