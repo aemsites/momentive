@@ -65,7 +65,7 @@ const createRelatedProductsBlock = (main, document) => {
   relatedProductsDiv?.remove();
 };
 
-/** Create Product Literature block */
+/** Create Product Documents block */
 const createProductDocumentsBlock = (main, document) => {
   const literatureSection = document.querySelector(
     '.table-grid-lg.grid-bordered.bg-gray-lightest-sm',
@@ -77,9 +77,12 @@ const createProductDocumentsBlock = (main, document) => {
     // Initialize an empty string to hold all link HTML
     let allLinksHtml = '';
 
-    // Iterate over each literature link, adding its HTML to the string
-    literatureSection.querySelectorAll('.mydoc a').forEach((link) => {
-      allLinksHtml += link.outerHTML;
+    const links = literatureSection.querySelectorAll('.mydoc a');
+    links.forEach((link, index) => {
+      // Append the link HTML and add a line break after each link, except the last one
+      allLinksHtml += `${link.outerHTML}${
+        index < links.length - 1 ? '<br>' : ''
+      }`;
     });
 
     // If there are links, add them as a single row
@@ -89,11 +92,11 @@ const createProductDocumentsBlock = (main, document) => {
 
     const table = WebImporter.DOMUtils.createTable(cells, document);
     main.append(table);
-    literatureSection.remove();
+    literatureSection.remove(); // Remove the original literature section from the DOM
   }
 };
 
-const createMetadata = (main, document, url) => {
+const createMetadata = (main, document) => {
   const meta = {};
 
   // General metadata extraction
@@ -191,13 +194,11 @@ export default {
       '.scroll-anchor',
     ]);
 
-    const productDetailSection = document.querySelector(
-      '.product-detail-top p',
-    );
+    const productDetailSection = document.querySelector('.product-detail-top');
     productDetailSection?.after(document.createElement('hr'));
 
     const moreAboutSection = document.querySelector(
-      '.more-information-container p',
+      '.more-information-container',
     );
 
     moreAboutSection?.after(document.createElement('hr'));
