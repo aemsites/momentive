@@ -11,79 +11,79 @@ const isDesktop = window.matchMedia('(min-width: 900px)');
  * @param {*} forceExpanded Optional param to force nav expand behavior when not null
  */
 function toggleMenu(nav, navSections, forceExpanded = null) {
-	const expanded = forceExpanded !== null ? !forceExpanded : nav.getAttribute('aria-expanded') === 'true';
-	document.body.style.overflowY = (expanded || isDesktop.matches) ? '' : 'hidden';
-	nav.setAttribute('aria-expanded', expanded ? 'false' : 'true');
-	navSections.setAttribute('aria-expanded', expanded ? 'false' : 'true');
+  const expanded = forceExpanded !== null ? !forceExpanded : nav.getAttribute('aria-expanded') === 'true';
+  document.body.style.overflowY = (expanded || isDesktop.matches) ? '' : 'hidden';
+  nav.setAttribute('aria-expanded', expanded ? 'false' : 'true');
+  navSections.setAttribute('aria-expanded', expanded ? 'false' : 'true');
 }
 
 function modifyNavListItemsForMobileView(nav) {
-	if (isDesktop.matches) return;
+  if (isDesktop.matches) return;
 
-	const mobileNavExists = nav.getAttribute('mobile-nav');
-	if (mobileNavExists) return;
-	const productsSubList = nav.querySelector('.nav-sections .default-content-wrapper > ul > li > ul');
-	const listItems = productsSubList.querySelectorAll('li');
+  const mobileNavExists = nav.getAttribute('mobile-nav');
+  if (mobileNavExists) return;
+  const productsSubList = nav.querySelector('.nav-sections .default-content-wrapper > ul > li > ul');
+  const listItems = productsSubList.querySelectorAll('li');
 
-	// Add classes based on the text content of the list items
-	listItems.forEach((item) => {
-		// Create a new i element and set its class to "arrow right"
-	  const arrowElement = document.createElement('i');
-	  arrowElement.className = 'arrow-right';
-	  if (item.textContent.includes('PRODUCT CATEGORIES')) {
-	    item.classList.add('secondary-nav-header', 'secondary-nav-product-categories');
-			item.appendChild(arrowElement);
-	  } else if (item.textContent.includes('INDUSTRIES')) {
-	    item.classList.add('secondary-nav-header', 'secondary-nav-industries');
-			item.appendChild(arrowElement);
-	  } else if (item.textContent.includes('BRAND')) {
-	    item.classList.add('secondary-nav-header', 'secondary-nav-brand');
-			item.appendChild(arrowElement);
-	  }
-	});
+  // Add classes based on the text content of the list items
+  listItems.forEach((item) => {
+    // Create a new i element and set its class to "arrow right"
+    const arrowElement = document.createElement('i');
+    arrowElement.className = 'arrow-right';
+    if (item.textContent.includes('PRODUCT CATEGORIES')) {
+      item.classList.add('secondary-nav-header', 'secondary-nav-product-categories');
+      item.appendChild(arrowElement);
+    } else if (item.textContent.includes('INDUSTRIES')) {
+      item.classList.add('secondary-nav-header', 'secondary-nav-industries');
+      item.appendChild(arrowElement);
+    } else if (item.textContent.includes('BRAND')) {
+      item.classList.add('secondary-nav-header', 'secondary-nav-brand');
+      item.appendChild(arrowElement);
+    }
+  });
 
-	const productsSubListHTML = Array.from(productsSubList.children).map(child => child.outerHTML).join('');
-	const productsListItem = nav.querySelector('.nav-sections .default-content-wrapper > ul > li');
-	productsSubList.remove();
-	productsListItem.insertAdjacentHTML('afterend', productsSubListHTML);
-	nav.setAttribute('mobile-nav', true);
+  const productsSubListHTML = Array.from(productsSubList.children).map(child => child.outerHTML).join('');
+  const productsListItem = nav.querySelector('.nav-sections .default-content-wrapper > ul > li');
+  productsSubList.remove();
+  productsListItem.insertAdjacentHTML('afterend', productsSubListHTML);
+  nav.setAttribute('mobile-nav', true);
 }
 
 // Restore nav list items on window resize from mobile to desktop
 function restoreNavListItems() {
-	const nav = document.getElementById('nav');
-	if (nav.getAttribute('mobile-nav') === null) return;
-	const navList = nav.querySelector('.nav-sections .default-content-wrapper > ul');
-	if (navList === null) return;
-	const listItems = navList.querySelectorAll('li');
+  const nav = document.getElementById('nav');
+  if (nav.getAttribute('mobile-nav') === null) return;
+  const navList = nav.querySelector('.nav-sections .default-content-wrapper > ul');
+  if (navList === null) return;
+  const listItems = navList.querySelectorAll('li');
 
-	const productsSubList = document.createElement('ul');
-	// Remove classes based on the text content of the list items
-	listItems.forEach((item) => {
-		if (item.textContent.includes('PRODUCT CATEGORIES')) {
-			item.classList.remove('secondary-nav-header', 'secondary-nav-product-categories');
-			item.removeChild(item.querySelector('.arrow-right'));
-			productsSubList.append(item);
-		} else if (item.textContent.includes('INDUSTRIES')) {
-			item.classList.remove('secondary-nav-header', 'secondary-nav-industries');
-			item.removeChild(item.querySelector('.arrow-right'));
-			productsSubList.append(item);
-		} else if (item.textContent.includes('BRAND')) {
-			item.classList.remove('secondary-nav-header', 'secondary-nav-brand');
-			item.removeChild(item.querySelector('.arrow-right'));
-			productsSubList.append(item);
-		}
-	});
+  const productsSubList = document.createElement('ul');
+  // Remove classes based on the text content of the list items
+  listItems.forEach((item) => {
+    if (item.textContent.includes('PRODUCT CATEGORIES')) {
+      item.classList.remove('secondary-nav-header', 'secondary-nav-product-categories');
+      item.removeChild(item.querySelector('.arrow-right'));
+      productsSubList.append(item);
+    } else if (item.textContent.includes('INDUSTRIES')) {
+      item.classList.remove('secondary-nav-header', 'secondary-nav-industries');
+      item.removeChild(item.querySelector('.arrow-right'));
+      productsSubList.append(item);
+    } else if (item.textContent.includes('BRAND')) {
+      item.classList.remove('secondary-nav-header', 'secondary-nav-brand');
+      item.removeChild(item.querySelector('.arrow-right'));
+      productsSubList.append(item);
+    }
+  });
 
-	if (productsSubList.children.length === 0) return;
+  if (productsSubList.children.length === 0) return;
 
   const productListItem = nav.querySelector('.nav-sections .default-content-wrapper > ul > li');
-	productListItem.appendChild(productsSubList);
-	nav.removeAttribute('mobile-nav');
+  productListItem.appendChild(productsSubList);
+  nav.removeAttribute('mobile-nav');
 }
 
 function createTranslateMenu(nav, brandRight) {
-	const translateMenu = document.createElement('div');
+  const translateMenu = document.createElement('div');
   translateMenu.classList.add('translate-menu');
 
   const translateIcon = document.createElement('a');
@@ -119,12 +119,12 @@ function createTranslateMenu(nav, brandRight) {
   });
 
   translateMenu.append(translateIcon, languagesDialog);
-	return translateMenu;
+  return translateMenu;
 }
 
 // Header top bar having brand logo, language selection, login, search and hamburger icon
 function decorateNavBrandBar(nav) {
-	const navBrand = document.createElement('div');
+  const navBrand = document.createElement('div');
   const logoLink = document.createElement('a');
   logoLink.href = '/';
 
@@ -138,7 +138,7 @@ function decorateNavBrandBar(nav) {
   const brandRight = document.createElement('div');
   brandRight.classList.add('nav-brand-right');
 
-	const translateMenu = createTranslateMenu(nav, brandRight);
+  const translateMenu = createTranslateMenu(nav, brandRight);
   brandRight.append(translateMenu);
 
   const loginIcon = document.createElement('a');
@@ -162,34 +162,34 @@ function decorateNavBrandBar(nav) {
   // hamburger for mobile view
   const hamburgerIcon = document.createElement('div');
   hamburgerIcon.classList.add('nav-hamburger-icon');
-	hamburgerIcon.addEventListener('click', () => {
+  hamburgerIcon.addEventListener('click', () => {
     const navSections = nav.querySelector('.nav-sections');
     modifyNavListItemsForMobileView(nav);
-		addEventsToNavItems(nav);
+    addEventsToNavItems(nav);
     toggleMenu(nav, navSections)
   });
   nav.setAttribute('aria-expanded', 'false');
 
   brandRight.append(loginIcon, loginText, searchIcon, searchText, hamburgerIcon);
   navBrand.append(brandRight);
-	return navBrand;
+  return navBrand;
 }
 
 function handleNavListItemClick(item, listItems) {
-	const expanded = item.getAttribute('aria-expanded') === 'true' ? 'false' : 'true';
+  const expanded = item.getAttribute('aria-expanded') === 'true' ? 'false' : 'true';
   item.setAttribute('aria-expanded', expanded);
 
 
-	// Get the child list of the clicked list item
+  // Get the child list of the clicked list item
   const childList = item.querySelector('ul');
 
-	// add item specific class
-	if (childList !== null) {
-		if (item.textContent.includes('ORDER PRODUCTS')) {
-			const secondLevelList = childList.querySelector('ul');
+  // add item specific class
+  if (childList !== null) {
+    if (item.textContent.includes('ORDER PRODUCTS')) {
+      const secondLevelList = childList.querySelector('ul');
       secondLevelList.classList.add('order-products-sub-list');
     }
-	}
+  }
 
   if (expanded === 'true') {
     listItems.forEach((siblingItem) => {
@@ -229,35 +229,35 @@ function addEventsToNavItems(nav) {
  * @param {Element} block The header block element
  */
 export default async function decorate(block) {
-	// load nav as fragment
-	const navMeta = getMetadata('nav');
-	const navPath = navMeta ? new URL(navMeta).pathname : '/nav';
-	const fragment = await loadFragment(navPath);
+  // load nav as fragment
+  const navMeta = getMetadata('nav');
+  const navPath = navMeta ? new URL(navMeta).pathname : '/nav';
+  const fragment = await loadFragment(navPath);
 
-	// decorate nav DOM
-	const nav = document.createElement('nav');
-	nav.id = 'nav';
+  // decorate nav DOM
+  const nav = document.createElement('nav');
+  nav.id = 'nav';
 
-	const navBrand = decorateNavBrandBar(nav);
-	nav.append(navBrand);
+  const navBrand = decorateNavBrandBar(nav);
+  nav.append(navBrand);
 
-	while (fragment.firstElementChild) nav.append(fragment.firstElementChild);
-	const classes = ['brand', 'sections'];
-	classes.forEach((c, i) => {
-		const section = nav.children[i];
-		if (section) section.classList.add(`nav-${c}`);
-	});
+  while (fragment.firstElementChild) nav.append(fragment.firstElementChild);
+  const classes = ['brand', 'sections'];
+  classes.forEach((c, i) => {
+    const section = nav.children[i];
+    if (section) section.classList.add(`nav-${c}`);
+  });
 
-	window.addEventListener('resize', () => {
-		if (window.matchMedia('(max-width: 900px)').matches) {
-			modifyNavListItemsForMobileView(nav);
-		} else {
-			restoreNavListItems();
-		}
-	});
+  window.addEventListener('resize', () => {
+    if (window.matchMedia('(max-width: 900px)').matches) {
+      modifyNavListItemsForMobileView(nav);
+    } else {
+      restoreNavListItems();
+    }
+  });
 
-	const navWrapper = document.createElement('div');
-	navWrapper.className = 'nav-wrapper';
-	navWrapper.append(nav);
-	block.append(navWrapper);
+  const navWrapper = document.createElement('div');
+  navWrapper.className = 'nav-wrapper';
+  navWrapper.append(nav);
+  block.append(navWrapper);
 }
