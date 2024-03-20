@@ -69,6 +69,20 @@ export function decorateMain(main) {
   decorateBlocks(main);
 }
 
+function applyTemplateDefaultContent(main) {
+  // Get classes for body element
+  const bodyClasses = document.body.classList;
+
+  // Check for known templates
+  if (bodyClasses.contains('product')) {
+    // Add left rail embed for product template
+    const leftRail = document.createElement('div');
+    const embedBlock = buildBlock('embed', { src: '/embed/product-left-rail' });
+    leftRail.appendChild(embedBlock);
+    main.prepend(leftRail);
+  }
+}
+
 /**
  * Loads everything needed to get to LCP.
  * @param {Element} doc The container element
@@ -107,6 +121,8 @@ async function loadLazy(doc) {
 
   loadHeader(doc.querySelector('header'));
   loadFooter(doc.querySelector('footer'));
+
+  applyTemplateDefaultContent(main);
 
   loadCSS(`${window.hlx.codeBasePath}/styles/lazy-styles.css`);
   loadFonts();
