@@ -1,11 +1,14 @@
 import {
   sampleRUM,
   buildBlock,
+  loadBlock,
   loadHeader,
   loadFooter,
+  fetchPlaceholders,
   decorateButtons,
   decorateIcons,
   decorateSections,
+  decorateBlock,
   decorateBlocks,
   decorateTemplateAndTheme,
   waitForLCP,
@@ -69,17 +72,71 @@ export function decorateMain(main) {
   decorateBlocks(main);
 }
 
-function applyTemplateDefaultContent(main) {
+async function applyTemplateDefaultContent(main) {
   // Get classes for body element
   const bodyClasses = document.body.classList;
 
   // Check for known templates
   if (bodyClasses.contains('product')) {
-    // Add left rail embed for product template
+    const placeholders = await fetchPlaceholders();
+
+    // ---- Apply hero style to first section
+    main.firstElementChild.classList.add('product-hero');
+
+    // ---- Move all other sections in a product-body div
+    const productBody = document.createElement('div');
+    productBody.classList.add('product-body');
+    const productContent = document.createElement('div');
+    productContent.classList.add('product-content');
+    while (main.childElementCount > 1) {
+      productContent.appendChild(main.children[1]);
+    }
+    // Append after the first section
+    productBody.appendChild(productContent);
+    main.appendChild(productBody);
+
+    // ---- Left rail
     const leftRail = document.createElement('div');
-    const embedBlock = buildBlock('embed', { src: '/embed/product-left-rail' });
-    leftRail.appendChild(embedBlock);
-    main.prepend(leftRail);
+    leftRail.classList.add('left-rail');
+    const fragmentBlock = buildBlock('fragment', "<a href='/fragments/product-left-rail'/>");
+    leftRail.appendChild(fragmentBlock);
+    // Prepend to productBody
+    productBody.prepend(leftRail);
+    decorateBlock(fragmentBlock);
+    await loadBlock(fragmentBlock);
+    const documentLinks = document.createElement('ul');
+
+    // Add an overview link target to the top of the page
+    main.querySelector('.section').id = 'overview';
+    const overview = document.createElement('li');
+    const overviewLink = document.createElement('a');
+    overviewLink.href = '#overview';
+    overviewLink.textContent = placeholders.overview;
+    overview.appendChild(overviewLink);
+    documentLinks.appendChild(overview);
+
+    // For each section, find the first h2 or h2 element
+    main.querySelectorAll('h2').forEach((header) => {
+      // Add a link to the left rail
+      const li = document.createElement('li');
+      const link = document.createElement('a');
+      link.href = `#${header.id}`;
+      link.textContent = header.textContent;
+      li.appendChild(link);
+      documentLinks.appendChild(li);
+    });
+    // Add to the start of the left rail
+    leftRail.querySelector('.default-content-wrapper').prepend(documentLinks);
+
+    // ---- Add breadcrumb
+    const breadcrumb = document.createElement('div');
+    breadcrumb.classList.add('breadcrumb');
+    const breadcrumbBlock = buildBlock('breadcrumb', '');
+    breadcrumb.appendChild(breadcrumbBlock);
+    // Append before the first section
+    main.firstElementChild.before(breadcrumb);
+    decorateBlock(breadcrumbBlock);
+    loadBlock(breadcrumbBlock);
   }
 }
 
@@ -122,7 +179,7 @@ async function loadLazy(doc) {
   loadHeader(doc.querySelector('header'));
   loadFooter(doc.querySelector('footer'));
 
-  applyTemplateDefaultContent(main);
+  await applyTemplateDefaultContent(main);
 
   loadCSS(`${window.hlx.codeBasePath}/styles/lazy-styles.css`);
   loadFonts();

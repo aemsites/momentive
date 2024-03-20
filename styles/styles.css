@@ -18,6 +18,7 @@
 
   /* used in the header and disclaimer at the bottom of the page */
   --light-gray: #d0d0ce;
+  --off-white: #f2f2f2;
 
   /* used in darker-color sections, and at very bottom of the page as the text color */
   --med-gray: #65646a;
@@ -34,12 +35,12 @@
 
 
   /* fonts */
-  --body-font-family: roboto, roboto-fallback;
+  --body-font-family: var(--avenir-regular), roboto, roboto-fallback;
   --heading-font-family: var(--body-font-family);
   --fixed-font-family: 'Roboto Mono', menlo, consolas, 'Liberation Mono', monospace;
 
   /* body sizes */
-  --body-font-size-m: 22px;
+  --body-font-size-m: 20px;
   --body-font-size-s: 18px;
   --body-font-size-xs: 16px;
   --body-font-size-xxs: 12px;
@@ -207,6 +208,11 @@ button:disabled, button:disabled:hover {
   cursor: unset;
 }
 
+main {
+  margin-top: 55px;
+  padding-top: 0;
+}
+
 main img {
   max-width: 100%;
   width: auto;
@@ -236,9 +242,9 @@ main .section {
 }
 
 @media (width >= 900px) {
-  .section > div {
-    max-width: 1200px;
-    margin: auto;
+  main {
+    max-width: 1650px;
+    margin: 55px auto 0;
   }
 }
 
@@ -252,7 +258,82 @@ main .section.dark {
   color: var(--background-color);
 }
 
-main .section.navy {
+main .section.navy, .section.product-hero {
   background-color: var(--navy-blue);
   color: var(--background-color);
+}
+
+.section.product-hero h1 {
+  text-align: center;
+  font-weight: 100;
+  margin:0.25em 0 0.85em;
+}
+
+.section.product-hero h1::after {
+  content: " ";
+  display: block;
+  width: 1.5em;
+  height: 8px;
+  margin: auto;
+  margin-top: 0.25em;
+  background-color: var(--orange);
+}
+
+body.product .product-body {
+  display: grid;
+  grid-template-columns: 390px 1fr;
+}
+
+body.product .product-content .section {
+  width: 99%;
+}
+
+body.product .product-content .section .default-content-wrapper {
+  max-width: 825px;
+  margin: auto;
+}
+
+/* Product template */
+body.product .left-rail {
+  background-color: var(--off-white);
+  font-weight: 100;
+  font-family: var(--avenir-regular);
+  font-size: var(--body-font-size-m);
+}
+
+body.product .left-rail ul {
+  list-style: none;
+  padding: 0;
+  margin: 6em 2em 0;
+}
+
+body.product .left-rail li {
+  margin: 1em 0 0.6em;
+}
+
+body.product .left-rail .button-container {
+  margin: 0;
+  padding: 0;
+  line-height: 0.85em;
+}
+
+body.product .left-rail a.button {
+  width: 100%;
+  padding: 1em;
+  margin:0;
+  border-radius:2em;
+  line-height: 1.7em;
+  font-family: var(--avenir-medium);
+}
+
+body.product .left-rail a.button.secondary {
+  border-radius: 0;
+  border:none;
+  background-color: var(--light-gray);
+  font-family: var(--avenir-regular);
+}
+
+body.product .left-rail a:any-link:not(.button), 
+body.product .left-rail a.button.secondary {
+  color: var(--navy-blue);
 }
