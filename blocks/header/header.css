@@ -158,13 +158,37 @@
     color: var(--navy-blue);
   }
 
+  .header nav .nav-sections .default-content-wrapper > ul > li > ul.sub-nav-list[aria-expanded="true"] {
+    display: flex;
+    flex-direction: column;
+    white-space: nowrap;
+    position: absolute;
+    text-align: left;
+    margin-top: 0.5em;
+    width: fit-content;
+    height: auto;
+    background-color: var(--menu-bg-color);
+    color: white;
+    transition: right 0.3s ease;
+    gap: 0;
+    padding: 1em;
+    font-family: var(--avenir-regular);
+    font-size: var(--body-font-size-xs);
+    line-height: 2em;
+    border-radius: 5px;
+    z-index: 10;
+  }
+
+  header nav .nav-sections .default-content-wrapper > ul > li > ul.sub-nav-list[aria-expanded='true'] > li > a {
+    color: white;
+  }
+
   header nav .nav-sections ul {
     list-style: none;
     padding-left: 0;
     display: flex;
     gap: 8em;
     margin: 0;
-    /*font-size: var(--body-font-size-xxs);*/
     cursor: pointer;
   }
 
@@ -178,25 +202,9 @@
     font-weight: 800;
   }
 
-  header nav .nav-sections .default-content-wrapper > ul > li > ul {
+  header nav[aria-expanded="false"] .nav-sections .default-content-wrapper > ul > li > ul  {
     display: none;
     position: relative;
-  }
-
-  header nav .nav-sections .default-content-wrapper > ul > li > ul::before {
-    content: '';
-    position: absolute;
-    top: -8px;
-    left: 8px;
-    width: 0;
-    height: 0;
-    border-left: 8px solid transparent;
-    border-right: 8px solid transparent;
-    /*border-bottom: 8px solid var(--light-color);*/
-  }
-
-  header nav .nav-sections .default-content-wrapper > ul > li > ul > li {
-    padding: 8px 0;
   }
 }
 
@@ -288,14 +296,15 @@
     top: 50%;
   }
 
-  header .sub-nav-list {
+  header nav .nav-sections .default-content-wrapper > ul > li > ul.sub-nav-list {
+    text-transform: none;
     width: 100%;
     position: relative;
     font-family: var(--avenir-regular);
     text-align: left;
-    padding-left: 4em;
+    padding-left: 2.5em;
     font-size: var(--body-font-size-xs);
-    margin-top: 2em;
+    margin-top: 1.5em;
   }
 
   header .sub-nav-list a {
@@ -306,6 +315,7 @@
     color: white;
     max-width: 100%;
     white-space: normal;
+    margin-bottom: 1em;
   }
 
   header nav .nav-sections .default-content-wrapper > ul > li[aria-expanded="true"] {
