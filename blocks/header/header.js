@@ -1,4 +1,4 @@
-import { fetchPlaceholders, getMetadata } from '../../scripts/aem.js';
+import { getMetadata } from '../../scripts/aem.js';
 import { loadFragment } from '../fragment/fragment.js';
 
 // media query match that indicates mobile/tablet width
@@ -11,42 +11,42 @@ const isDesktop = window.matchMedia('(min-width: 900px)');
  * @param {*} forceExpanded Optional param to force nav expand behavior when not null
  */
 function toggleMenu(nav, navSections, forceExpanded = null) {
-  const expanded = forceExpanded !== null ? !forceExpanded : nav.getAttribute('aria-expanded') === 'true';
-  document.body.style.overflowY = (expanded || isDesktop.matches) ? '' : 'hidden';
-  nav.setAttribute('aria-expanded', expanded ? 'false' : 'true');
+	const expanded = forceExpanded !== null ? !forceExpanded : nav.getAttribute('aria-expanded') === 'true';
+	document.body.style.overflowY = (expanded || isDesktop.matches) ? '' : 'hidden';
+	nav.setAttribute('aria-expanded', expanded ? 'false' : 'true');
 	navSections.setAttribute('aria-expanded', expanded ? 'false' : 'true');
 }
 
 function modifyNavListItemsForMobileView(nav) {
-	if (!isDesktop.matches) {
-		const mobileNavExists = nav.getAttribute('mobile-nav');
-		if (mobileNavExists) return;
-    const productsSubList = nav.querySelector('.nav-sections .default-content-wrapper > ul > li > ul');
-    const listItems = productsSubList.querySelectorAll('li');
+	if (isDesktop.matches) return;
 
-    // Add classes based on the text content of the list items
-    listItems.forEach((item) => {
-			// Create a new i element and set its class to "arrow right"
-      const arrowElement = document.createElement('i');
-      arrowElement.className = 'arrow-right';
-      if (item.textContent.includes('PRODUCT CATEGORIES')) {
-        item.classList.add('secondary-nav-header', 'secondary-nav-product-categories');
-				item.appendChild(arrowElement);
-      } else if (item.textContent.includes('INDUSTRIES')) {
-        item.classList.add('secondary-nav-header', 'secondary-nav-industries');
-				item.appendChild(arrowElement);
-      } else if (item.textContent.includes('BRAND')) {
-        item.classList.add('secondary-nav-header', 'secondary-nav-brand');
-				item.appendChild(arrowElement);
-      }
-    });
+	const mobileNavExists = nav.getAttribute('mobile-nav');
+	if (mobileNavExists) return;
+	const productsSubList = nav.querySelector('.nav-sections .default-content-wrapper > ul > li > ul');
+	const listItems = productsSubList.querySelectorAll('li');
 
-    const productsSubListHTML = Array.from(productsSubList.children).map(child => child.outerHTML).join('');
-    const productsListItem = nav.querySelector('.nav-sections .default-content-wrapper > ul > li');
-    productsSubList.remove();
-    productsListItem.insertAdjacentHTML('afterend', productsSubListHTML);
-		nav.setAttribute('mobile-nav', true);
-  }
+	// Add classes based on the text content of the list items
+	listItems.forEach((item) => {
+		// Create a new i element and set its class to "arrow right"
+	  const arrowElement = document.createElement('i');
+	  arrowElement.className = 'arrow-right';
+	  if (item.textContent.includes('PRODUCT CATEGORIES')) {
+	    item.classList.add('secondary-nav-header', 'secondary-nav-product-categories');
+			item.appendChild(arrowElement);
+	  } else if (item.textContent.includes('INDUSTRIES')) {
+	    item.classList.add('secondary-nav-header', 'secondary-nav-industries');
+			item.appendChild(arrowElement);
+	  } else if (item.textContent.includes('BRAND')) {
+	    item.classList.add('secondary-nav-header', 'secondary-nav-brand');
+			item.appendChild(arrowElement);
+	  }
+	});
+
+	const productsSubListHTML = Array.from(productsSubList.children).map(child => child.outerHTML).join('');
+	const productsListItem = nav.querySelector('.nav-sections .default-content-wrapper > ul > li');
+	productsSubList.remove();
+	productsListItem.insertAdjacentHTML('afterend', productsSubListHTML);
+	nav.setAttribute('mobile-nav', true);
 }
 
 // Restore nav list items on window resize from mobile to desktop
@@ -220,9 +220,7 @@ function addEventsToNavItems(nav) {
   const listItems = nav.querySelectorAll('.nav-sections .default-content-wrapper > ul > li');
 
   listItems.forEach((item) => {
-    item.addEventListener('click', function() {
-      handleNavListItemClick(item, listItems);
-    });
+    item.addEventListener('click', () => handleNavListItemClick(item, listItems));
   });
 }
 
@@ -231,35 +229,35 @@ function addEventsToNavItems(nav) {
  * @param {Element} block The header block element
  */
 export default async function decorate(block) {
-  // load nav as fragment
-  const navMeta = getMetadata('nav');
-  const navPath = navMeta ? new URL(navMeta).pathname : '/nav';
-  const fragment = await loadFragment(navPath);
+	// load nav as fragment
+	const navMeta = getMetadata('nav');
+	const navPath = navMeta ? new URL(navMeta).pathname : '/nav';
+	const fragment = await loadFragment(navPath);
 
-  // decorate nav DOM
-  const nav = document.createElement('nav');
-  nav.id = 'nav';
+	// decorate nav DOM
+	const nav = document.createElement('nav');
+	nav.id = 'nav';
 
 	const navBrand = decorateNavBrandBar(nav);
 	nav.append(navBrand);
 
-  while (fragment.firstElementChild) nav.append(fragment.firstElementChild);
+	while (fragment.firstElementChild) nav.append(fragment.firstElementChild);
 	const classes = ['brand', 'sections'];
-  classes.forEach((c, i) => {
-    const section = nav.children[i];
-    if (section) section.classList.add(`nav-${c}`);
-  });
+	classes.forEach((c, i) => {
+		const section = nav.children[i];
+		if (section) section.classList.add(`nav-${c}`);
+	});
 
 	window.addEventListener('resize', () => {
-    if (window.matchMedia('(max-width: 900px)').matches) {
-      modifyNavListItemsForMobileView(nav);
-    } else {
-      restoreNavListItems();
-    }
-  });
+		if (window.matchMedia('(max-width: 900px)').matches) {
+			modifyNavListItemsForMobileView(nav);
+		} else {
+			restoreNavListItems();
+		}
+	});
 
-  const navWrapper = document.createElement('div');
-  navWrapper.className = 'nav-wrapper';
-  navWrapper.append(nav);
-  block.append(navWrapper);
+	const navWrapper = document.createElement('div');
+	navWrapper.className = 'nav-wrapper';
+	navWrapper.append(nav);
+	block.append(navWrapper);
 }
