@@ -98,6 +98,10 @@ async function applyTemplateDefaultContent(main) {
     // ---- Left rail
     const leftRail = document.createElement('div');
     leftRail.classList.add('left-rail');
+    const toggle = document.createElement('input');
+    toggle.type = 'checkbox';
+    toggle.id = 'left-rail-toggle';
+    leftRail.appendChild(toggle);
     const fragmentBlock = buildBlock('fragment', "<a href='/fragments/product-left-rail'/>");
     leftRail.appendChild(fragmentBlock);
     // Prepend to productBody
@@ -127,7 +131,6 @@ async function applyTemplateDefaultContent(main) {
     });
     // Add to the start of the left rail
     leftRail.querySelector('.default-content-wrapper').prepend(documentLinks);
-
     // ---- Add breadcrumb
     const breadcrumb = document.createElement('div');
     breadcrumb.classList.add('breadcrumb');
