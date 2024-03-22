@@ -53,22 +53,17 @@ export default async function decorate(block) {
   socialLanguagesContainer.appendChild(footerSocial);
   socialLanguagesContainer.appendChild(footerLanguages);
 
-  // Append the container to .footer-main
   section.appendChild(socialLanguagesContainer);
 
-  // Create a container for footer-sublinks and default-content
   const sublinksContentContainer = document.createElement('div');
   sublinksContentContainer.classList.add('footer-sublinks-row');
 
-  // Select footer-sublinks and default-content
   const footerSublinks = footer.querySelector('.footer-sublinks-wrapper');
   const defaultContent = footer.querySelector('.default-content-wrapper');
 
-  // Append footer-sublinks and default-content to the container
   sublinksContentContainer.appendChild(footerSublinks);
   sublinksContentContainer.appendChild(defaultContent);
 
-  // Append the container to .footer-main
   section.appendChild(sublinksContentContainer);
 
   block.append(footer);
