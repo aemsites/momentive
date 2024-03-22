@@ -1,0 +1,136 @@
+body.with-left-rail .main-content .section .default-content-wrapper {
+  max-width: 825px;
+  margin: auto;
+}
+  
+body .left-rail-wrapper {
+  position: sticky;
+  top: 129px;
+  max-height: 0;
+  overflow:visible;
+}
+
+body .left-rail .rail-content {
+  background-color: var(--off-white);
+  font-weight: 100;
+  font-family: var(--avenir-regular);
+  font-size: var(--body-font-size-m);
+  min-height: 100vh;
+  transform:translateX(-100vw);
+  width: 90vw;
+  position: relative;
+  top:-35px;
+  transition: transform ease .1s;
+}
+
+body .left-rail #left-rail-toggle:checked+.rail-content {
+  transform:translateX(0);
+  transition: transform ease .1s;
+}
+
+body #left-rail-toggle {
+  zoom:2;
+  padding: 0;
+  margin: 0;
+  position: sticky;
+  transition: left ease .1s;
+  left: 0;
+}
+
+body .left-rail #left-rail-toggle:checked {
+  left: 45vw;
+  transition: left ease .1s;
+}
+
+body #left-rail-toggle::after {
+  content: "\00f550";
+  font-family: FontAwesome, sans-serif;
+  font-weight: 900;
+  display: block;
+  z-index:100;
+  top: 0;
+  left: 0;
+  width: 15px;
+  height: 15px;
+  padding: 5px;
+  background-color: var(--orange);
+  color: white;
+  font-size:1.1em;
+  pointer-events:all;
+  cursor:pointer;
+}
+
+body .left-rail ul {
+  list-style: none;
+  margin: 0;
+  padding: 4em 1em 0;
+}
+
+body .left-rail li {
+  margin: 1em 0 2em;
+}
+
+body .left-rail .button-container {
+  margin: 0;
+  padding: 0;
+  line-height: 0.85em;
+}
+
+body .left-rail a.button {
+  width: 100%;
+  padding: 1em;
+  margin:0;
+  border-radius:2em;
+  line-height: 0.9em;
+  font-family: var(--avenir-medium);
+}
+
+body .left-rail a.button.secondary {
+  border-radius: 0;
+  border:none;
+  background-color: var(--light-gray);
+  font-family: var(--avenir-regular);
+}
+
+body .left-rail a:any-link:not(.button), 
+body .left-rail a.button.secondary {
+  color: var(--navy-blue);
+}
+
+@media (width >= 900px) {
+  body.with-left-rail .content-body {
+    display: grid;
+    grid-template-columns: 390px 1fr;
+  }
+
+  body .left-rail-wrapper {
+    width: unset;
+    position: unset;
+    max-height:unset;
+  }
+
+  body .left-rail {
+    height: 100%;
+    max-width: fit-content;
+    background-color: var(--off-white);
+  }
+
+  body .left-rail #left-rail-toggle {
+    display: none;
+  }
+
+  body .left-rail .rail-content {
+    width: 375px;
+    transform:translateX(0);
+    top:0;
+    height: 100%;
+  }
+
+  body .left-rail ul {
+    padding: 6em 2em 0;
+  }
+
+  body .left-rail a.button {
+    line-height: 1.7em;
+  }
+}
