@@ -31,6 +31,12 @@ export default async function decorate(block) {
     document.querySelectorAll('h2').forEach((header) => {
       toc.appendChild(createElement('li', {}, createElement('a', { href: `#${header.id}` }, header.textContent)));
     });
+    // For each child of toc, add click event to close the rail
+    toc.querySelectorAll('a').forEach((link) => {
+      link.addEventListener('click', () => {
+        document.getElementById('left-rail-toggle').checked = false;
+      });
+    });
   }
 
   if (embed) {
