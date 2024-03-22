@@ -57,59 +57,6 @@ function createTranslateMenu() {
   return translateMenu;
 }
 
-// Header top bar having brand logo, language selection, login, search and hamburger icon
-function decorateNavBrandBar(nav) {
-  const navBrand = document.createElement('div');
-  const logoLink = document.createElement('a');
-  logoLink.href = '/';
-
-  const logo = document.createElement('img');
-  logo.src = '/images/mpm_logo_white_color_v_tag_long_sml.png';
-  logo.classList.add('logo');
-  logoLink.append(logo);
-  navBrand.append(logoLink);
-
-  // create a div for the right side of the brand div
-  const brandRight = document.createElement('div');
-  brandRight.classList.add('nav-brand-right');
-
-  const translateMenu = createTranslateMenu(nav, brandRight);
-  brandRight.append(translateMenu);
-
-  const loginIcon = document.createElement('a');
-  loginIcon.classList.add('icon-login');
-  loginIcon.href = 'https://www.momentive.com/en-us/login';
-
-  const loginText = document.createElement('a');
-  loginText.classList.add('text-login');
-  loginText.textContent = 'LOG IN/REGISTER';
-  loginText.href = 'https://www.momentive.com/en-us/login';
-
-  const searchIcon = document.createElement('a');
-  searchIcon.classList.add('icon-search');
-  searchIcon.href = '#';
-
-  const searchText = document.createElement('a');
-  searchText.classList.add('text-search');
-  searchText.textContent = 'SEARCH';
-  searchText.href = '#';
-
-  // hamburger for mobile view
-  const hamburgerIcon = document.createElement('div');
-  hamburgerIcon.classList.add('nav-hamburger-icon');
-  hamburgerIcon.addEventListener('click', () => {
-    const navSections = nav.querySelector('.nav-sections');
-    createPrimaryNavForMobView(nav);
-    addEventsToNavItems(nav);
-    toggleMenu(nav, navSections)
-  });
-  nav.setAttribute('aria-expanded', 'false');
-
-  brandRight.append(loginIcon, loginText, searchIcon, searchText, hamburgerIcon);
-  navBrand.append(brandRight);
-  return navBrand;
-}
-
 function createPrimaryNavForMobView(nav) {
   if (isDesktop.matches) return;
 
@@ -141,11 +88,14 @@ function createPrimaryNavForMobView(nav) {
   productsSubList.remove();
   productsListItem.insertAdjacentHTML('afterend', productsSubListHTML);
   nav.setAttribute('mobile-nav', true);
+  addEventsToNavItems(nav);
 }
 
 // Restore nav list items on window resize from mobile to desktop
 function restoreNavOnWindowResize() {
   const nav = document.getElementById('nav');
+  // const expanded = nav.getAttribute('aria-expanded') === 'true';
+  nav.setAttribute('aria-expanded', 'false');
   if (nav.getAttribute('mobile-nav') === null) return;
   const navList = nav.querySelector('.nav-sections .default-content-wrapper > ul');
   if (navList === null) return;
@@ -174,6 +124,75 @@ function restoreNavOnWindowResize() {
   const productListItem = nav.querySelector('.nav-sections .default-content-wrapper > ul > li');
   productListItem.appendChild(productsSubList);
   nav.removeAttribute('mobile-nav');
+}
+
+function addEventsToNavItems(nav) {
+  const listItems = nav.querySelectorAll('.nav-sections .default-content-wrapper > ul > li');
+
+  listItems.forEach((item) => {
+    const clickListenerAdded = item.getAttribute('click-listener-added');
+    if (clickListenerAdded === 'true') return;
+    item.addEventListener('click', () => {
+      if (isDesktop.matches) {
+        handleSecondaryNavForDesktop(nav, item);
+      } else {
+        handleSecondaryNavForMobView(item, listItems);
+      }
+    });
+    item.setAttribute('click-listener-added', 'true');
+  });
+}
+
+// Header top bar having brand logo, language selection, login, search and hamburger icon
+function decorateNavBrandBar(nav) {
+  const navBrand = document.createElement('div');
+  const logoLink = document.createElement('a');
+  logoLink.href = '/';
+
+  const logo = document.createElement('img');
+  logo.src = '/images/mpm_logo_white_color_v_tag_long_sml.png';
+  logo.classList.add('logo');
+  logoLink.append(logo);
+  navBrand.append(logoLink);
+
+  // create a div for the right side of the brand div
+  const brandRight = document.createElement('div');
+  brandRight.classList.add('nav-brand-right');
+
+  const translateMenu = createTranslateMenu(nav, brandRight);
+  brandRight.append(translateMenu);
+
+  const loginIcon = document.createElement('a');
+  loginIcon.classList.add('icon-login');
+  loginIcon.href = 'https://www.momentive.com/en-us/login';
+
+  const loginText = document.createElement('a');
+  loginText.classList.add('text-login');
+  loginText.textContent = 'LOG IN / REGISTER';
+  loginText.href = 'https://www.momentive.com/en-us/login';
+
+  const searchIcon = document.createElement('a');
+  searchIcon.classList.add('icon-search');
+  searchIcon.href = '#';
+
+  const searchText = document.createElement('a');
+  searchText.classList.add('text-search');
+  searchText.textContent = 'SEARCH';
+  searchText.href = '#';
+
+  // hamburger for mobile view
+  const hamburgerIcon = document.createElement('div');
+  hamburgerIcon.classList.add('nav-hamburger-icon');
+  hamburgerIcon.addEventListener('click', () => {
+    const navSections = nav.querySelector('.nav-sections');
+    createPrimaryNavForMobView(nav);
+    toggleMenu(nav, navSections);
+  });
+  nav.setAttribute('aria-expanded', 'false');
+
+  brandRight.append(loginIcon, loginText, searchIcon, searchText, hamburgerIcon);
+  navBrand.append(brandRight);
+  return navBrand;
 }
 
 function handleSecondaryNavForMobView(item, listItems) {
@@ -211,7 +230,6 @@ function handleSecondaryNavForMobView(item, listItems) {
 }
 
 function handleSecondaryNavForDesktop(nav, item) {
-  // const secondaryNav = item.querySelector('.secondary-nav');
   const subList = item.querySelector('ul');
   const expanded = subList.getAttribute('aria-expanded') === 'true' ? 'false' : 'true';
   if (expanded === 'false') {
@@ -219,27 +237,28 @@ function handleSecondaryNavForDesktop(nav, item) {
   } else {
     subList.setAttribute('aria-expanded', 'true');
     subList.className = 'sub-nav-list';
-		//TODO: specially handle these cases
-    // if (item.textContent.includes('PRODUCT CATEGORIES')) {
-		//
-    // } else if (item.textContent.includes('ORDER PRODUCTS')) {
-		//
-    // }
-  }
-}
-
-function addEventsToNavItems(nav) {
-  const listItems = nav.querySelectorAll('.nav-sections .default-content-wrapper > ul > li');
-
-  listItems.forEach((item) => {
-    item.addEventListener('click', () => {
-      if (isDesktop.matches) {
-        handleSecondaryNavForDesktop(nav, item);
-      } else {
-        handleSecondaryNavForMobView(item, listItems);
+    if (item.textContent.startsWith('PRODUCTS')) {
+      subList.classList.add('product-sub-list');
+      const secondLevelLists = subList.querySelectorAll('ul');
+      if (secondLevelLists.length > 0) {
+        secondLevelLists.forEach((secondLevelList) => {
+          secondLevelList.classList.add('product-sub-sub-list');
+        });
       }
-    });
-  });
+      // const secondLevelListItem = subList.querySelector('li');
+      const listItems = Array.from(subList.querySelectorAll('li'));
+      const productCategoriesListItem = listItems.find(li => li.textContent.startsWith('PRODUCT CATEGORIES'));
+      productCategoriesListItem.classList.add('product-categories-list-item');
+      const industriesListItem = listItems.find(li => li.textContent.startsWith('INDUSTRIES'));
+      industriesListItem.classList.add('industries-list-item');
+      const brandListItem = listItems.find(li => li.textContent.startsWith('BRAND'));
+      brandListItem.classList.add('brand-list-item');
+    } else if (item.textContent.startsWith('ORDER PRODUCTS')) {
+      subList.classList.add('order-products-sub-list');
+      const orderProductsSubList = subList.querySelector('li > ul');
+      orderProductsSubList.classList.add('order-products-list-item');
+    }
+  }
 }
 
 /**
