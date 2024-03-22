@@ -5,7 +5,7 @@ body.with-left-rail .main-content .section .default-content-wrapper {
   
 body .left-rail-wrapper {
   position: sticky;
-  top: 80px;
+  top: 129px;
   max-height: 0;
   overflow:visible;
 }
