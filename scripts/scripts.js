@@ -14,6 +14,7 @@ import {
   waitForLCP,
   loadBlocks,
   loadCSS,
+  createElement,
 } from './aem.js';
 
 const LCP_BLOCKS = []; // add your LCP blocks to the list
@@ -27,9 +28,9 @@ function buildHeroBlock(main) {
   const picture = main.querySelector('picture');
   // eslint-disable-next-line no-bitwise
   if (h1 && picture && (h1.compareDocumentPosition(picture) & Node.DOCUMENT_POSITION_PRECEDING)) {
-    const section = document.createElement('div');
-    section.append(buildBlock('hero', { elems: [picture, h1] }));
-    main.prepend(section);
+    main.prepend(createElement('div', {}, buildBlock('hero', { elems: [picture, h1] })));
+  } else if (h1) {
+    h1.parentElement.classList.add('plain-hero');
   }
 }
 
@@ -80,62 +81,21 @@ async function applyTemplateDefaultContent(main) {
   if (bodyClasses.contains('product')) {
     const placeholders = await fetchPlaceholders();
 
-    // ---- Apply hero style to first section
-    main.firstElementChild.classList.add('product-hero');
-
-    // ---- Move all other sections in a product-body div
-    const productBody = document.createElement('div');
-    productBody.classList.add('product-body');
-    const productContent = document.createElement('div');
-    productContent.classList.add('product-content');
-    while (main.childElementCount > 1) {
-      productContent.appendChild(main.children[1]);
-    }
-    // Append after the first section
-    productBody.appendChild(productContent);
-    main.appendChild(productBody);
-
     // ---- Left rail
-    const leftRail = document.createElement('div');
-    leftRail.classList.add('left-rail');
-    const toggle = document.createElement('input');
-    toggle.type = 'checkbox';
-    toggle.id = 'left-rail-toggle';
-    leftRail.appendChild(toggle);
-    const fragmentBlock = buildBlock('fragment', "<a href='/fragments/product-left-rail'/>");
-    leftRail.appendChild(fragmentBlock);
-    // Prepend to productBody
-    productBody.prepend(leftRail);
-    decorateBlock(fragmentBlock);
-    await loadBlock(fragmentBlock);
-    const documentLinks = document.createElement('ul');
+    const leftRailBlock = buildBlock('left-rail', [
+      ['first section name', placeholders.overview],
+      ['toc', true],
+      ['embed', '/fragments/product-left-rail'],
+    ]);
+    const leftRail = createElement('div', {}, leftRailBlock);
+    // Prepend after the first section (the hero)
+    main.firstElementChild.after(leftRail);
+    decorateBlock(leftRailBlock);
+    loadBlock(leftRailBlock);
 
-    // Add an overview link target to the top of the page
-    main.querySelector('.section').id = 'overview';
-    const overview = document.createElement('li');
-    const overviewLink = document.createElement('a');
-    overviewLink.href = '#overview';
-    overviewLink.textContent = placeholders.overview;
-    overview.appendChild(overviewLink);
-    documentLinks.appendChild(overview);
-
-    // For each section, find the first h2 or h2 element
-    main.querySelectorAll('h2').forEach((header) => {
-      // Add a link to the left rail
-      const li = document.createElement('li');
-      const link = document.createElement('a');
-      link.href = `#${header.id}`;
-      link.textContent = header.textContent;
-      li.appendChild(link);
-      documentLinks.appendChild(li);
-    });
-    // Add to the start of the left rail
-    leftRail.querySelector('.default-content-wrapper').prepend(documentLinks);
     // ---- Add breadcrumb
-    const breadcrumb = document.createElement('div');
-    breadcrumb.classList.add('breadcrumb');
     const breadcrumbBlock = buildBlock('breadcrumb', '');
-    breadcrumb.appendChild(breadcrumbBlock);
+    const breadcrumb = createElement('div', {}, breadcrumbBlock);
     // Append before the first section
     main.firstElementChild.before(breadcrumb);
     decorateBlock(breadcrumbBlock);

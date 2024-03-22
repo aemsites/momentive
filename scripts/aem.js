@@ -543,10 +543,10 @@ function buildBlock(blockName, content) {
       const vals = col.elems ? col.elems : [col];
       vals.forEach((val) => {
         if (val) {
-          if (typeof val === 'string') {
-            colEl.innerHTML += val;
-          } else {
+          if (typeof val === 'object' && val.nodeType !== undefined) {
             colEl.appendChild(val);
+          } else {
+            colEl.innerHTML += val;
           }
         }
       });
@@ -680,6 +680,23 @@ async function waitForLCP(lcpBlocks) {
   });
 }
 
+function createElement(tagName, attributes, ...children) {
+  const el = document.createElement(tagName);
+  if (attributes) {
+    Object.keys(attributes).forEach((name) => {
+      el.setAttribute(name, attributes[name]);
+    });
+  }
+  children.forEach((child) => {
+    if (typeof child === 'string') {
+      el.appendChild(document.createTextNode(child));
+    } else if (child) {
+      el.appendChild(child);
+    }
+  });
+  return el;
+}
+
 init();
 
 export {
@@ -706,4 +723,5 @@ export {
   toClassName,
   updateSectionsStatus,
   waitForLCP,
+  createElement,
 };

@@ -56,12 +56,3 @@
   url("/fonts/Avenir-Next-Cyr-W00-Bold.ttf") format("truetype"),
   url("/fonts/Avenir-Next-Cyr-W00-Bold.svg") format("svg");
 }
-
-/* load fontawesome */
-@font-face {
-  font-family: 'Font Awesome 5 Free';
-  font-style: normal;
-  font-weight: 900;
-  font-display: block;
-  src: url('https://use.fontawesome.com/releases/v5.15.1/webfonts/fa-solid-900.eot');
-}
