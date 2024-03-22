@@ -5,7 +5,7 @@ body.with-left-rail .main-content .section .default-content-wrapper {
   
 body .left-rail-wrapper {
   position: sticky;
-  top: 129px;
+  top: 80px;
   max-height: 0;
   overflow:visible;
 }
@@ -19,8 +19,12 @@ body .left-rail .rail-content {
   transform:translateX(-100vw);
   width: 90vw;
   position: relative;
-  top:-35px;
+  top:-44px;
   transition: transform ease .1s;
+}
+
+#left-rail-toggle {
+  display: none;
 }
 
 body .left-rail #left-rail-toggle:checked+.rail-content {
@@ -28,36 +32,30 @@ body .left-rail #left-rail-toggle:checked+.rail-content {
   transition: transform ease .1s;
 }
 
-body #left-rail-toggle {
-  zoom:2;
-  padding: 0;
+body .left-rail-toggle {
   margin: 0;
-  position: sticky;
+  position:relative;
   transition: left ease .1s;
-  left: 0;
-}
-
-body .left-rail #left-rail-toggle:checked {
-  left: 45vw;
-  transition: left ease .1s;
-}
-
-body #left-rail-toggle::after {
-  content: "\00f550";
+  content: "";
   font-family: FontAwesome, sans-serif;
   font-weight: 900;
-  display: block;
+  display: inline-block;
   z-index:100;
   top: 0;
   left: 0;
-  width: 15px;
-  height: 15px;
-  padding: 5px;
+  width: 36px;
+  height: 36px;
+  padding: 0 0 8px 8px;
   background-color: var(--orange);
   color: white;
-  font-size:1.1em;
+  font-size:28px;
   pointer-events:all;
   cursor:pointer;
+}
+
+body .left-rail .left-rail-toggle:has(+ :checked) {
+  left: 90vw;
+  transition: left ease .1s;
 }
 
 body .left-rail ul {

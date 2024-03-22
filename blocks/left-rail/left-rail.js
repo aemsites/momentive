@@ -16,7 +16,7 @@ export default async function decorate(block) {
   document.body.classList.add('with-left-rail');
   // Build out left rail, starting with the toggle
   const railContent = createElement('div', { class: 'rail-content' });
-  const rail = createElement('div', {}, createElement('input', { type: 'checkbox', id: 'left-rail-toggle' }), railContent);
+  const rail = createElement('div', {}, createElement('label', { for: 'left-rail-toggle', class: 'left-rail-toggle' }, '\uf550'), createElement('input', { type: 'checkbox', id: 'left-rail-toggle' }), railContent);
 
   if (includeToc) {
     const toc = createElement('ul');
