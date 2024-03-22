@@ -14,20 +14,23 @@
 
         @media (width >= 900px) {
             flex-direction: row;
+
             >:nth-child(2) {
                 flex: 0 0 58%;
             }
         }
     }
+
     h1,h2,h3 {
         font-family: var(--avenir-regular);
         font-size: var(--heading-font-size-xl);
-        margin: 0rem;
+        margin: 0;
     }
+
     p {
         font-size: 1rem;
         font-weight: 400;
-        margin: 0rem;
+        margin: 0;
     }
     
     &.red {
@@ -35,6 +38,7 @@
             background-color: var(--strong-red);
             padding: 3rem 3rem 3rem 1rem;
         }
+
         > div > :nth-child(2) {
             background-color: var(--reddish-pink);
             padding: 3.5rem 3rem 3rem 2rem;
@@ -44,22 +48,24 @@
     &.blue {
         > div > :nth-child(1) {
             background-color: var(--dark-navy-blue);
-            padding: 1rem 1rem 1rem 1rem;
+            padding: 1rem;
         }
+
         > div > :nth-child(2) {
             background-color: var(--cyan-blue);
-            padding: 1rem 1rem 1rem 1rem;
+            padding: 1rem;
         }
     }
 
     &.orange {
         > div > :nth-child(1) {
             background-color: var(--vivid-orange-warm);
-            padding: 1rem 1rem 1rem 1rem;
+            padding: 1rem;
         }
+
         > div > :nth-child(2) {
             background-color: var(--vivid-orange);
-            padding: 1rem 1rem 1rem 1rem;
+            padding: 1rem;
         }
     }
 
@@ -74,6 +80,7 @@
             color: var(--background-color);
             font-size: 1rem;
         }
+
         a {
             text-decoration: none;
         }
@@ -86,9 +93,11 @@
         .red-color {
             color: var(--strong-red);
         }
+
         .blue-color {
             color: var(--dark-navy-blue);
         }
+        
         .orange-color {
             color: var(--vivid-orange-warm);
         }
