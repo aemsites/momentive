@@ -33,6 +33,14 @@
   /* Used in CTA buttons */
   --orange: #fd8e02;
 
+  /* Used in the info hightlights background */
+  --strong-red: #c30d2e;
+  --reddish-pink: #a10419;
+  --dark-navy-blue: #0082cb;
+  --cyan-blue: #239ee3;
+  --vivid-orange-warm: #fd8204;
+  --vivid-orange: #cf6000;
+
 
   /* fonts */
   --body-font-family: var(--avenir-regular), roboto, roboto-fallback;

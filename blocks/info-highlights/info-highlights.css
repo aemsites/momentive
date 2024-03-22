@@ -1,0 +1,97 @@
+.info-highlights-wrapper {
+    text-align: left;
+    line-height: 1.45rem;
+    margin-top: -4rem;
+    width: 100vw;
+}
+
+.info-highlights {
+    color: var(--background-color);
+
+    > div {
+        display: inline-flex;
+        flex-direction: column;
+
+        @media (width >= 900px) {
+            flex-direction: row;
+            >:nth-child(2) {
+                flex: 0 0 58%;
+            }
+        }
+    }
+    h1,h2,h3 {
+        font-family: var(--avenir-regular);
+        font-size: var(--heading-font-size-xl);
+        margin: 0rem;
+    }
+    p {
+        font-size: 1rem;
+        font-weight: 400;
+        margin: 0rem;
+    }
+    
+    &.red {
+        > div > :nth-child(1) {
+            background-color: var(--strong-red);
+            padding: 3rem 3rem 3rem 1rem;
+        }
+        > div > :nth-child(2) {
+            background-color: var(--reddish-pink);
+            padding: 3.5rem 3rem 3rem 2rem;
+        }
+    }
+
+    &.blue {
+        > div > :nth-child(1) {
+            background-color: var(--dark-navy-blue);
+            padding: 1rem 1rem 1rem 1rem;
+        }
+        > div > :nth-child(2) {
+            background-color: var(--cyan-blue);
+            padding: 1rem 1rem 1rem 1rem;
+        }
+    }
+
+    &.orange {
+        > div > :nth-child(1) {
+            background-color: var(--vivid-orange-warm);
+            padding: 1rem 1rem 1rem 1rem;
+        }
+        > div > :nth-child(2) {
+            background-color: var(--vivid-orange);
+            padding: 1rem 1rem 1rem 1rem;
+        }
+    }
+
+    .contact-us {
+        border: 2px solid white;
+        width: fit-content;
+        padding: 0.2rem 1rem 0.2rem 4.5rem;
+        border-radius: 0.3rem;
+        margin-top: 1rem;
+
+        span {
+            color: var(--background-color);
+            font-size: 1rem;
+        }
+        a {
+            text-decoration: none;
+        }
+        
+    }
+
+    .contact-us:hover {
+        background-color: var(--background-color);
+        
+        .red-color {
+            color: var(--strong-red);
+        }
+        .blue-color {
+            color: var(--dark-navy-blue);
+        }
+        .orange-color {
+            color: var(--vivid-orange-warm);
+        }
+    }
+
+}
