@@ -113,7 +113,7 @@ body .left-rail a.button.secondary {
     background-color: var(--off-white);
   }
 
-  body .left-rail #left-rail-toggle {
+  body .left-rail .left-rail-toggle {
     display: none;
   }
 
