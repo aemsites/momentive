@@ -417,9 +417,27 @@ function decorateIcon(span, prefix = '', alt = '') {
  * @param {string} [prefix] prefix to be added to icon the src
  */
 function decorateIcons(element, prefix = '') {
-  const icons = [...element.querySelectorAll('span.icon')];
-  icons.forEach((span) => {
-    decorateIcon(span, prefix);
+  const faPrefixes = ['fa-', 'far-', 'fab-', 'fas-', 'fal-'];
+  element.querySelectorAll('span.icon').forEach((span) => {
+    const iconName = Array.from(span.classList).find((c) => c.startsWith('icon-')).substring(5);
+    const isFaIcon = faPrefixes.some((p) => iconName.startsWith(p));
+    if (isFaIcon) {
+      const faIcon = iconName.split('-');
+      const faPrefix = faIcon[0];
+      const faIconName = faIcon.slice(1).join('-');
+      span.setAttribute('data-icon-name', iconName);
+      span.className = `fa-icon ${faPrefix} fa-${faIconName}`;
+      span.setAttribute('role', 'img');
+      if (!span.hasAttribute('aria-label')) {
+        const friendlyIconName = faIconName
+          .split('-')
+          .map((word) => `${word.substring(0, 1).toUpperCase()}${word.substring(1)}`)
+          .join(' ');
+        span.setAttribute('aria-label', friendlyIconName);
+      }
+    } else {
+      decorateIcon(span, prefix);
+    }
   });
 }
 
