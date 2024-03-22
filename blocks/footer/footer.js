@@ -9,13 +9,67 @@ export default async function decorate(block) {
   const footerMeta = getMetadata('footer');
   block.textContent = '';
 
-  // load footer fragment
   const footerPath = footerMeta.footer || '/footer';
   const fragment = await loadFragment(footerPath);
 
-  // decorate footer DOM
   const footer = document.createElement('div');
   while (fragment.firstElementChild) footer.append(fragment.firstElementChild);
+
+  // Directly select the .footer-main container to append the columns to
+  const footerMain = footer.querySelector('.footer-main');
+  const section = footer.querySelector('.section');
+
+  // Find each <h3> within .footer-main
+  const mainSections = footerMain.querySelectorAll('h3');
+  mainSections.forEach((h3) => {
+    // Identify the next <ul> before any changes
+    const nextUl = h3.nextElementSibling && h3.nextElementSibling.tagName === 'UL'
+      ? h3.nextElementSibling
+      : null;
+
+    // Create the wrapper and append <h3>
+    const wrapperDiv = document.createElement('div');
+    wrapperDiv.classList.add('footer-column');
+
+    // Remove the <h3> and <ul> from their current parent and append them to the wrapper
+    wrapperDiv.appendChild(h3);
+    if (nextUl) {
+      wrapperDiv.appendChild(nextUl);
+    }
+
+    // Append the wrapper div directly to .footer-main
+    footerMain.appendChild(wrapperDiv);
+  });
+
+  // Create a container for footer-social and footer-languages
+  const socialLanguagesContainer = document.createElement('div');
+  socialLanguagesContainer.classList.add('footer-social-row');
+
+  // Select footer-social and footer-languages
+  const footerSocial = footer.querySelector('.footer-social-wrapper');
+  const footerLanguages = footer.querySelector('.footer-languages-wrapper');
+
+  // Append footer-social and footer-languages to the container
+  socialLanguagesContainer.appendChild(footerSocial);
+  socialLanguagesContainer.appendChild(footerLanguages);
+
+  // Append the container to .footer-main
+  section.appendChild(socialLanguagesContainer);
+
+  // Create a container for footer-sublinks and default-content
+  const sublinksContentContainer = document.createElement('div');
+  sublinksContentContainer.classList.add('footer-sublinks-row');
+
+  // Select footer-sublinks and default-content
+  const footerSublinks = footer.querySelector('.footer-sublinks-wrapper');
+  const defaultContent = footer.querySelector('.default-content-wrapper');
+
+  // Append footer-sublinks and default-content to the container
+  sublinksContentContainer.appendChild(footerSublinks);
+  sublinksContentContainer.appendChild(defaultContent);
+
+  // Append the container to .footer-main
+  section.appendChild(sublinksContentContainer);
 
   block.append(footer);
 }
