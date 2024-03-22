@@ -1,16 +1,20 @@
 import {
   sampleRUM,
   buildBlock,
+  loadBlock,
   loadHeader,
   loadFooter,
+  fetchPlaceholders,
   decorateButtons,
   decorateIcons,
   decorateSections,
+  decorateBlock,
   decorateBlocks,
   decorateTemplateAndTheme,
   waitForLCP,
   loadBlocks,
   loadCSS,
+  createElement,
 } from './aem.js';
 
 const LCP_BLOCKS = []; // add your LCP blocks to the list
@@ -24,9 +28,9 @@ function buildHeroBlock(main) {
   const picture = main.querySelector('picture');
   // eslint-disable-next-line no-bitwise
   if (h1 && picture && (h1.compareDocumentPosition(picture) & Node.DOCUMENT_POSITION_PRECEDING)) {
-    const section = document.createElement('div');
-    section.append(buildBlock('hero', { elems: [picture, h1] }));
-    main.prepend(section);
+    main.prepend(createElement('div', {}, buildBlock('hero', { elems: [picture, h1] })));
+  } else if (h1) {
+    h1.parentElement.classList.add('plain-hero');
   }
 }
 
@@ -69,6 +73,36 @@ export function decorateMain(main) {
   decorateBlocks(main);
 }
 
+async function applyTemplateDefaultContent(main) {
+  // Get classes for body element
+  const bodyClasses = document.body.classList;
+
+  // Check for known templates
+  if (bodyClasses.contains('product')) {
+    const placeholders = await fetchPlaceholders();
+
+    // ---- Left rail
+    const leftRailBlock = buildBlock('left-rail', [
+      ['first section name', placeholders.overview],
+      ['toc', true],
+      ['embed', '/fragments/product-left-rail'],
+    ]);
+    const leftRail = createElement('div', {}, leftRailBlock);
+    // Prepend after the first section (the hero)
+    main.firstElementChild.after(leftRail);
+    decorateBlock(leftRailBlock);
+    loadBlock(leftRailBlock);
+
+    // ---- Add breadcrumb
+    const breadcrumbBlock = buildBlock('breadcrumb', '');
+    const breadcrumb = createElement('div', {}, breadcrumbBlock);
+    // Append before the first section
+    main.firstElementChild.before(breadcrumb);
+    decorateBlock(breadcrumbBlock);
+    loadBlock(breadcrumbBlock);
+  }
+}
+
 /**
  * Loads everything needed to get to LCP.
  * @param {Element} doc The container element
@@ -107,6 +141,8 @@ async function loadLazy(doc) {
 
   loadHeader(doc.querySelector('header'));
   loadFooter(doc.querySelector('footer'));
+
+  await applyTemplateDefaultContent(main);
 
   loadCSS(`${window.hlx.codeBasePath}/styles/lazy-styles.css`);
   loadFonts();

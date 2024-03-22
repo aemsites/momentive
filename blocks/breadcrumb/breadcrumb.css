@@ -1,0 +1,9 @@
+.breadcrumb {
+    background-color: var(--navy-blue);
+    padding-top:0.7em;
+    padding-left:0.8em;
+    font-size: var(--body-font-size-xxs);
+    font-family: var(--avenir-regular);
+    font-weight: 100;
+    color: var(--light-gray);
+}

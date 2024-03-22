@@ -18,6 +18,7 @@
 
   /* used in the header and disclaimer at the bottom of the page */
   --light-gray: #d0d0ce;
+  --off-white: #f2f2f2;
 
   /* used in darker-color sections, and at very bottom of the page as the text color */
   --med-gray: #65646a;
@@ -34,12 +35,12 @@
 
 
   /* fonts */
-  --body-font-family: roboto, roboto-fallback;
+  --body-font-family: var(--avenir-regular), roboto, roboto-fallback;
   --heading-font-family: var(--body-font-family);
   --fixed-font-family: 'Roboto Mono', menlo, consolas, 'Liberation Mono', monospace;
 
   /* body sizes */
-  --body-font-size-m: 22px;
+  --body-font-size-m: 20px;
   --body-font-size-s: 18px;
   --body-font-size-xs: 16px;
   --body-font-size-xxs: 12px;
@@ -60,6 +61,7 @@
   --avenir-demi: "Avenir Next Cyr W00 Demi";
   --avenir-regular: "Avenir Next Cyr W00 Regular";
   --avenir-medium: "Avenir Next Cyr W00 Medium";
+  --font-awesome: "FontAwesome";
 }
 
 @font-face {
@@ -207,6 +209,11 @@ button:disabled, button:disabled:hover {
   cursor: unset;
 }
 
+main {
+  margin: 0;
+  padding-top: 0;
+}
+
 main img {
   max-width: 100%;
   width: auto;
@@ -236,9 +243,9 @@ main .section {
 }
 
 @media (width >= 900px) {
-  .section > div {
-    max-width: 1200px;
-    margin: auto;
+  main {
+    max-width: 1650px;
+    margin: 50px auto 0;
   }
 }
 
@@ -252,7 +259,23 @@ main .section.dark {
   color: var(--background-color);
 }
 
-main .section.navy {
+main .section.navy, .section.plain-hero {
   background-color: var(--navy-blue);
   color: var(--background-color);
+}
+
+.section.plain-hero h1 {
+  text-align: center;
+  font-weight: 100;
+  margin:0.25em 0 0.85em;
+}
+
+.section.plain-hero h1::after {
+  content: " ";
+  display: block;
+  width: 1.5em;
+  height: 8px;
+  margin: auto;
+  margin-top: 0.25em;
+  background-color: var(--orange);
 }
