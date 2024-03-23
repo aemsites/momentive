@@ -19,8 +19,8 @@ async function decorateProductDocuments(block) {
     const link = createElement('a', { href: document.href }, icon, document.textContent);
     return createElement('div', { class: 'document' }, link);
   });
-  documents.unshift(createElement('h2', { id: 'product-literature' }, placeholders.productLiterature));
-  return documents;
+  const header = createElement('h2', { id: 'product-literature' }, placeholders.productLiterature);
+  return createElement('div', {}, header, createElement('div', { class: 'documents' }, ...documents));
 }
 
 export default async function decorate(block) {
@@ -28,6 +28,6 @@ export default async function decorate(block) {
   if (block.classList.contains('technical')) {
     block.replaceChildren(...await decorateTechnicalDocuments(block));
   } else if (block.classList.contains('product')) {
-    block.replaceChildren(...await decorateProductDocuments(block));
+    block.replaceChildren(await decorateProductDocuments(block));
   }
 }
