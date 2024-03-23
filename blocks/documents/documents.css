@@ -39,3 +39,9 @@
 .block.documents.product .documents>*:hover {
     background-color: var(--off-white);
 }
+
+.block.documents.product .documents .show-download::after {
+    content: url("/icons/download.png");
+    display:block;
+    float:right;
+}

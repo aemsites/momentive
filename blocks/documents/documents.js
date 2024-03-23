@@ -16,7 +16,7 @@ async function decorateProductDocuments(block) {
     // check if link ends with pdf
     const isPdf = document.href.endsWith('.pdf');
     const icon = createElement('i', { class: `fas fa-file${isPdf ? '-pdf' : ''}` });
-    const link = createElement('a', { href: document.href }, icon, document.textContent);
+    const link = createElement('a', { href: document.href, class: isPdf ? 'show-download' : '' }, icon, document.textContent);
     return createElement('div', { class: 'document' }, link);
   });
   const header = createElement('h2', { id: 'product-literature' }, placeholders.productLiterature);
