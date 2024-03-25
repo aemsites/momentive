@@ -52,10 +52,13 @@ export default async function decorate(block) {
   }
 
   if (embed) {
-    const fragmentBlock = buildBlock('fragment', `<a href='${embed}'/>`);
+    const fragmentBlock = buildBlock('fragment', `<a href='${embed}' style='display:none'/>`);
     railContent.appendChild(fragmentBlock);
-    decorateBlock(fragmentBlock);
-    loadBlock(fragmentBlock);
+    // Delay this until after first paint
+    setTimeout(() => {
+      decorateBlock(fragmentBlock);
+      loadBlock(fragmentBlock);
+    }, 100);
   }
 
   if (body) {
