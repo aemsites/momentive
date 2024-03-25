@@ -34,6 +34,7 @@
     border-bottom: 1px solid var(--off-white);
     padding: 0.7em 0;
     font-size: var(--body-font-size-xs);
+    cursor: pointer;
 }
 
 .block.documents.product .documents>*:hover {
