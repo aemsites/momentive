@@ -45,3 +45,11 @@
     display:block;
     float:right;
 }
+
+.block.documents.product a.download-all {
+    border: none;
+    color: var(--orange);
+    display: block;
+    margin-top: 0.8em;
+    text-transform: uppercase;
+}

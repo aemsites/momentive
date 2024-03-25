@@ -17,10 +17,23 @@ async function decorateProductDocuments(block) {
     const isPdf = document.href.endsWith('.pdf');
     const icon = createElement('i', { class: `fas fa-file${isPdf ? '-pdf' : ''}` });
     const link = createElement('a', { href: document.href, class: isPdf ? 'show-download' : '' }, icon, document.textContent);
+    if (isPdf) {
+      link.setAttribute('download', '');
+    }
     return createElement('div', { class: 'document' }, link);
   });
   const header = createElement('h2', { id: 'product-literature' }, placeholders.productLiterature);
-  return createElement('div', {}, header, createElement('div', { class: 'documents' }, ...documents));
+  const downloadAll = createElement('a', { href: '#', class: 'download-all' }, placeholders.downloadAll);
+  downloadAll.addEventListener('click', (event) => {
+    event.preventDefault();
+    documents.forEach((document) => {
+      const link = document.querySelector('a');
+      if (link.classList.contains('show-download')) {
+        link.click();
+      }
+    });
+  });
+  return createElement('div', {}, header, createElement('div', { class: 'documents' }, ...documents, downloadAll));
 }
 
 export default async function decorate(block) {
