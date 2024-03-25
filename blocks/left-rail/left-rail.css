@@ -72,11 +72,6 @@ body .left-rail li {
   margin: 1em 0 2em;
 }
 
-body .left-rail li a:any-link:not(.button):hover {
-  color: var(--med-gray);
-  text-decoration: none;
-}
-
 body .left-rail .button-container {
   margin: 0;
   padding: 0;
@@ -102,6 +97,11 @@ body .left-rail a.button.secondary {
 body .left-rail a:any-link:not(.button), 
 body .left-rail a.button.secondary {
   color: var(--navy-blue);
+}
+
+body .left-rail li a:any-link:not(.button):hover {
+  color: var(--med-gray);
+  text-decoration: none;
 }
 
 body .left-rail a.button.secondary:hover {
