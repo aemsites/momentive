@@ -35,9 +35,9 @@ async function decorateProductDocuments(block) {
         if (link.classList.contains('show-download')) {
           link.click();
         }
-        documents.append(downloadAll);
       });
     });
+    documents.push(downloadAll);
   }
   return createElement('div', {}, header, createElement('div', { class: 'documents' }, ...documents));
 }

@@ -52,4 +52,16 @@
     display: block;
     margin-top: 0.8em;
     text-transform: uppercase;
+    text-align: center;
+}
+
+.block.documents.product a.download-all:hover {
+    text-decoration: none;
+    background-color: unset;
+}
+
+@media (width >= 900px) {
+    .block.documents.product a.download-all {
+        text-align: left;;
+    }
 }
