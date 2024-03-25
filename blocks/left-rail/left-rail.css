@@ -72,6 +72,11 @@ body .left-rail li {
   margin: 1em 0 2em;
 }
 
+body .left-rail li a:any-link:not(.button):hover {
+  color: var(--med-gray);
+  text-decoration: none;
+}
+
 body .left-rail .button-container {
   margin: 0;
   padding: 0;
@@ -99,6 +104,11 @@ body .left-rail a.button.secondary {
   color: var(--navy-blue);
 }
 
+body .left-rail a.button.secondary:hover {
+  background-color: var(--med-gray);
+  color: var(--background-color);
+}
+
 @media (width >= 900px) {
   body.with-left-rail .content-body {
     display: grid;
@@ -117,6 +127,10 @@ body .left-rail a.button.secondary {
     background-color: var(--off-white);
   }
 
+  body .left-rail:not(:has(:checked)) {
+    pointer-events: all;
+  }
+  
   body .left-rail .left-rail-toggle {
     display: none;
   }
