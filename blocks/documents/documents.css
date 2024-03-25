@@ -11,8 +11,10 @@
 }
 
 .block.documents.technical a {
-    line-height: 3em;
+    padding: 0.7em;
+    max-width: 85vw;
     border-radius: 2em;
+    white-space: inherit;
 }
 
 .block.documents.product h2 {
@@ -62,6 +64,10 @@
 }
 
 @media (width >= 900px) {
+    .block.documents.technical a {
+        padding: 0.7em 2em;
+    }
+
     .block.documents.product a.download-all {
         text-align: left;;
     }
