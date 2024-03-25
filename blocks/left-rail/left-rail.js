@@ -16,7 +16,7 @@ export default async function decorate(block) {
   document.body.classList.add('with-left-rail');
   // Build out left rail, starting with the toggle
   const railContent = createElement('div', { class: 'rail-content' });
-  const rail = createElement('div', {}, createElement('input', { type: 'checkbox', id: 'left-rail-toggle' }), railContent);
+  const rail = createElement('div', {}, createElement('label', { for: 'left-rail-toggle', class: 'left-rail-toggle' }, '\uf550'), createElement('input', { type: 'checkbox', id: 'left-rail-toggle' }), railContent);
 
   if (includeToc) {
     const toc = createElement('ul');
@@ -30,6 +30,12 @@ export default async function decorate(block) {
     // For each section, find the first h2 or h2 element
     document.querySelectorAll('h2').forEach((header) => {
       toc.appendChild(createElement('li', {}, createElement('a', { href: `#${header.id}` }, header.textContent)));
+    });
+    // For each child of toc, add click event to close the rail
+    toc.querySelectorAll('a').forEach((link) => {
+      link.addEventListener('click', () => {
+        document.getElementById('left-rail-toggle').checked = false;
+      });
     });
   }
 
