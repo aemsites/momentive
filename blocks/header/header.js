@@ -57,6 +57,99 @@ function createTranslateMenu() {
   return translateMenu;
 }
 
+function handleSecondaryNavForMobView(item, listItems) {
+  const expanded = item.getAttribute('aria-expanded') === 'true' ? 'false' : 'true';
+  item.setAttribute('aria-expanded', expanded);
+
+  // Get the child list of the clicked list item
+  const childList = item.querySelector('ul');
+
+  if (expanded === 'true') {
+    listItems.forEach((siblingItem) => {
+      if (siblingItem !== item) {
+        siblingItem.style.display = 'none';
+      }
+    });
+    if (childList) {
+      childList.classList.add('sub-nav-list');
+      childList.style.display = 'block';
+      if (item.textContent.includes('ORDER PRODUCTS')) {
+        const secondLevelList = childList.querySelector('ul');
+        secondLevelList.classList.add('order-products-sub-list');
+      }
+    }
+  } else {
+    // If 'aria-expanded' is 'false', display all list items
+    listItems.forEach((siblingItem) => {
+      siblingItem.style.display = 'block';
+    });
+
+    if (childList) {
+      childList.classList.add('sub-nav-list');
+      childList.style.display = 'none';
+    }
+  }
+}
+
+function handleSecondaryNavForDesktop(nav, item) {
+  const subList = item.querySelector('ul');
+  const expanded = subList.getAttribute('aria-expanded') === 'true' ? 'false' : 'true';
+  if (expanded === 'false') {
+    subList.setAttribute('aria-expanded', 'false');
+  } else {
+    subList.setAttribute('aria-expanded', 'true');
+    subList.className = 'sub-nav-list';
+    if (item.textContent.startsWith('PRODUCTS')) {
+      subList.classList.add('product-sub-list');
+      const secondLevelLists = subList.querySelectorAll('ul');
+      if (secondLevelLists.length > 0) {
+        secondLevelLists.forEach((secondLevelList) => {
+          secondLevelList.classList.add('product-sub-sub-list');
+        });
+      }
+      // const secondLevelListItem = subList.querySelector('li');
+      const listItems = Array.from(subList.querySelectorAll('li'));
+      const productCategoriesListItem = listItems.find((li) => li.textContent.startsWith('PRODUCT CATEGORIES'));
+      productCategoriesListItem.classList.add('product-categories-list-item');
+      const industriesListItem = listItems.find((li) => li.textContent.startsWith('INDUSTRIES'));
+      industriesListItem.classList.add('industries-list-item');
+      const brandListItem = listItems.find((li) => li.textContent.startsWith('BRAND'));
+      brandListItem.classList.add('brand-list-item');
+    } else if (item.textContent.startsWith('ORDER PRODUCTS')) {
+      subList.classList.add('order-products-sub-list');
+      const orderProductsSubList = subList.querySelector('li > ul');
+      orderProductsSubList.classList.add('order-products-list-item');
+    }
+  }
+}
+
+function addEventsToNavItems(nav) {
+  const listItems = nav.querySelectorAll('.nav-sections .default-content-wrapper > ul > li');
+
+  listItems.forEach((item) => {
+    if (isDesktop.matches) {
+      const mouseHoverListenersAdded = item.getAttribute('data-mouse-hover-listener-added') || 'false';
+      if (mouseHoverListenersAdded === 'false') {
+        item.addEventListener('mouseenter', () => {
+          handleSecondaryNavForDesktop(nav, item);
+        });
+        item.addEventListener('mouseleave', () => {
+          handleSecondaryNavForDesktop(nav, item);
+        });
+        item.setAttribute('data-mouse-hover-listener-added', 'true');
+      }
+    } else if (!isDesktop.matches) {
+      const clickListenerAdded = item.getAttribute('data-clk-listener-added');
+      if (clickListenerAdded === 'false') {
+        item.addEventListener('click', () => {
+          handleSecondaryNavForMobView(item, listItems);
+        });
+        item.setAttribute('data-clk-listener-added', 'true');
+      }
+    }
+  });
+}
+
 function createPrimaryNavForMobView(nav) {
   if (isDesktop.matches) return;
 
@@ -126,23 +219,6 @@ function restoreNavOnWindowResize() {
   nav.removeAttribute('mobile-nav');
 }
 
-function addEventsToNavItems(nav) {
-  const listItems = nav.querySelectorAll('.nav-sections .default-content-wrapper > ul > li');
-
-  listItems.forEach((item) => {
-    const clickListenerAdded = item.getAttribute('click-listener-added');
-    if (clickListenerAdded === 'true') return;
-    item.addEventListener('click', () => {
-      if (isDesktop.matches) {
-        handleSecondaryNavForDesktop(nav, item);
-      } else {
-        handleSecondaryNavForMobView(item, listItems);
-      }
-    });
-    item.setAttribute('click-listener-added', 'true');
-  });
-}
-
 // Header top bar having brand logo, language selection, login, search and hamburger icon
 function decorateNavBrandBar(nav) {
   const navBrand = document.createElement('div');
@@ -193,72 +269,6 @@ function decorateNavBrandBar(nav) {
   brandRight.append(loginIcon, loginText, searchIcon, searchText, hamburgerIcon);
   navBrand.append(brandRight);
   return navBrand;
-}
-
-function handleSecondaryNavForMobView(item, listItems) {
-  const expanded = item.getAttribute('aria-expanded') === 'true' ? 'false' : 'true';
-  item.setAttribute('aria-expanded', expanded);
-
-  // Get the child list of the clicked list item
-  const childList = item.querySelector('ul');
-
-  if (expanded === 'true') {
-    listItems.forEach((siblingItem) => {
-      if (siblingItem !== item) {
-        siblingItem.style.display = 'none';
-      }
-    });
-    if (childList) {
-      childList.classList.add('sub-nav-list');
-      childList.style.display = 'block';
-      if (item.textContent.includes('ORDER PRODUCTS')) {
-        const secondLevelList = childList.querySelector('ul');
-        secondLevelList.classList.add('order-products-sub-list');
-      }
-    }
-  } else {
-    // If 'aria-expanded' is 'false', display all list items
-    listItems.forEach((siblingItem) => {
-      siblingItem.style.display = 'block';
-    });
-
-    if (childList) {
-      childList.classList.add('sub-nav-list');
-      childList.style.display = 'none';
-    }
-  }
-}
-
-function handleSecondaryNavForDesktop(nav, item) {
-  const subList = item.querySelector('ul');
-  const expanded = subList.getAttribute('aria-expanded') === 'true' ? 'false' : 'true';
-  if (expanded === 'false') {
-    subList.setAttribute('aria-expanded', 'false');
-  } else {
-    subList.setAttribute('aria-expanded', 'true');
-    subList.className = 'sub-nav-list';
-    if (item.textContent.startsWith('PRODUCTS')) {
-      subList.classList.add('product-sub-list');
-      const secondLevelLists = subList.querySelectorAll('ul');
-      if (secondLevelLists.length > 0) {
-        secondLevelLists.forEach((secondLevelList) => {
-          secondLevelList.classList.add('product-sub-sub-list');
-        });
-      }
-      // const secondLevelListItem = subList.querySelector('li');
-      const listItems = Array.from(subList.querySelectorAll('li'));
-      const productCategoriesListItem = listItems.find(li => li.textContent.startsWith('PRODUCT CATEGORIES'));
-      productCategoriesListItem.classList.add('product-categories-list-item');
-      const industriesListItem = listItems.find(li => li.textContent.startsWith('INDUSTRIES'));
-      industriesListItem.classList.add('industries-list-item');
-      const brandListItem = listItems.find(li => li.textContent.startsWith('BRAND'));
-      brandListItem.classList.add('brand-list-item');
-    } else if (item.textContent.startsWith('ORDER PRODUCTS')) {
-      subList.classList.add('order-products-sub-list');
-      const orderProductsSubList = subList.querySelector('li > ul');
-      orderProductsSubList.classList.add('order-products-list-item');
-    }
-  }
 }
 
 /**
