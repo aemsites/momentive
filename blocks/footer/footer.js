@@ -59,10 +59,8 @@ export default async function decorate(block) {
   sublinksContentContainer.classList.add('footer-sublinks-row');
 
   const footerSublinks = footer.querySelector('.footer-sublinks-wrapper');
-  const defaultContent = footer.querySelector('.default-content-wrapper');
 
   sublinksContentContainer.appendChild(footerSublinks);
-  sublinksContentContainer.appendChild(defaultContent);
 
   section.appendChild(sublinksContentContainer);
 
