@@ -39,7 +39,7 @@ function convertMarketingBulletin(builder) {
   });
 }
 
-function converMomTechnicalDocuments(builder) {
+function convertMomTechnicalDocuments(builder) {
   const techDocuments = builder.doc.querySelector('.elc__tech-document');
   if (!techDocuments) {
     return;
@@ -105,7 +105,9 @@ function convertPatternedDocuments(builder) {
   // If doc has no dvplain element, append one
   if (technicalDocuments.length > 0) {
     if (!builder.doc.querySelector('#dvplain')) {
-      builder.doc.append(builder.doc.createElement('div')).id = 'dvplain';
+      const div = builder.doc.createElement('div');
+      div.id = 'dvplain';
+      builder.doc.body.append(div);
     }
     builder.replace(builder.doc.querySelector('#dvplain'), () => {
       builder.block('Documents (Technical)', 1).element('ul');
@@ -120,7 +122,9 @@ function convertPatternedDocuments(builder) {
   if (productLiterature.length > 0) {
     // If doc has no mydoc element, append one
     if (!builder.doc.querySelector('.mydoc')) {
-      builder.doc.append(builder.doc.createElement('div')).className = 'mydoc';
+      const div = builder.doc.createElement('div');
+      div.className = 'mydoc';
+      builder.doc.body.append(div);
     }
     builder.replace(builder.doc.querySelector('.mydoc'), () => {
       builder.block('Documents (Product)', 1).element('ul');
