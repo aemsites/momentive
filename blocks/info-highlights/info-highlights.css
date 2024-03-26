@@ -1,106 +1,98 @@
 .info-highlights-wrapper {
     text-align: left;
     line-height: 1.45rem;
-    margin-top: -4rem;
-    width: 100vw;
 }
 
 .info-highlights {
     color: var(--background-color);
+}
 
-    > div {
-        display: inline-flex;
-        flex-direction: column;
+.info-highlights  > div {
+    display: inline-flex;
+    flex-direction: column;
+}
 
-        @media (width >= 900px) {
-            flex-direction: row;
-
-            >:nth-child(2) {
-                flex: 0 0 58%;
-            }
-        }
-    }
-
-    h1,h2,h3 {
-        font-family: var(--avenir-regular);
-        font-size: var(--heading-font-size-xl);
-        margin: 0;
-    }
-
-    p {
-        font-size: 1rem;
-        font-weight: 400;
-        margin: 0;
+@media (width >= 900px) {
+    .info-highlights > div {
+        flex-direction: row;
     }
     
-    &.red {
-        > div > :nth-child(1) {
-            background-color: var(--strong-red);
-            padding: 3rem 3rem 3rem 1rem;
-        }
-
-        > div > :nth-child(2) {
-            background-color: var(--reddish-pink);
-            padding: 3.5rem 3rem 3rem 2rem;
-        }
+    .info-highlights > div > :nth-child(2) {
+        flex: 0 0 58%;
     }
+}
 
-    &.blue {
-        > div > :nth-child(1) {
-            background-color: var(--dark-navy-blue);
-            padding: 1rem;
-        }
+.info-highlights h1, .info-highlights h2, .info-highlights h3 {
+    font-family: var(--avenir-regular);
+    font-size: var(--heading-font-size-xl);
+    margin: 0;
+}
 
-        > div > :nth-child(2) {
-            background-color: var(--cyan-blue);
-            padding: 1rem;
-        }
-    }
+.info-highlights p {
+    font-size: 1rem;
+    font-weight: 400;
+    margin: 0;
+}
 
-    &.orange {
-        > div > :nth-child(1) {
-            background-color: var(--vivid-orange-warm);
-            padding: 1rem;
-        }
+.info-highlights.red  > div > :nth-child(1) {
+    background-color: var(--strong-red);
+    padding: 3rem 3rem 3rem 1rem;
+}
 
-        > div > :nth-child(2) {
-            background-color: var(--vivid-orange);
-            padding: 1rem;
-        }
-    }
+.info-highlights.red  > div > :nth-child(2) {
+    background-color: var(--reddish-pink);
+    padding: 3.5rem 3rem 3rem 2rem;
+}
 
-    .contact-us {
-        border: 2px solid white;
-        width: fit-content;
-        padding: 0.2rem 1rem 0.2rem 4.5rem;
-        border-radius: 0.3rem;
-        margin-top: 1rem;
+.info-highlights.blue  > div > :nth-child(1) {
+    background-color: var(--dark-navy-blue);
+    padding: 1rem;
+}
 
-        span {
-            color: var(--background-color);
-            font-size: 1rem;
-        }
+.info-highlights.blue  > div > :nth-child(2) {
+    background-color: var(--cyan-blue);
+    padding: 1rem;
+}
 
-        a {
-            text-decoration: none;
-        }
-        
-    }
+.info-highlights.orange  > div > :nth-child(1) {
+    background-color: var(--vivid-orange-warm);
+    padding: 1rem;
+}
 
-    .contact-us:hover {
-        background-color: var(--background-color);
-        
-        .red-color {
-            color: var(--strong-red);
-        }
+.info-highlights.orange  > div > :nth-child(2) {
+    background-color: var(--vivid-orange);
+    padding: 1rem;
+}
 
-        .blue-color {
-            color: var(--dark-navy-blue);
-        }
-        
-        .orange-color {
-            color: var(--vivid-orange-warm);
-        }
-    }
+.info-highlights .contact-us {
+    border: 2px solid white;
+    width: fit-content;
+    padding: 0.2rem 1rem 0.2rem 4.5rem;
+    border-radius: 0.3rem;
+    margin-top: 1rem;
+}
 
+.info-highlights .contact-us span {
+    color: var(--background-color);
+    font-size: 1rem;
+}
+
+.info-highlights .contact-us a {
+    text-decoration: none;
+}
+
+.info-highlights .contact-us:hover {
+    background-color: var(--background-color);
+}
+
+.info-highlights .contact-us:hover .red-color {
+    color: var(--strong-red);
+}
+
+.info-highlights .contact-us:hover .blue-color {
+    color: var(--dark-navy-blue);
+}
+
+.info-highlights .contact-us:hover .orange-color {
+    color: var(--vivid-orange-warm);
 }

@@ -25,11 +25,15 @@ export default function decorate(block) {
   if (block.classList.contains('contact-us')) {
     // appending the "contact-us" in the block
     const contactUsParentBlock = block.firstElementChild.firstElementChild;
-
-    contactUsParentBlock.innerHTML += `<div class="contact-us"> 
-                                        <a href="/en-us/contact-us">
-                                            <span class="${colorCode}">CONTACT US</span>
-                                        </a>
-                                       </div>`;
+    const contactUsBlock = document.createElement('div');
+    contactUsBlock.classList.add('contact-us');
+    const link = document.createElement('a');
+    link.href = '/en-us/contact-us';
+    const span = document.createElement('span');
+    span.classList.add(colorCode);
+    span.innerText = 'CONTACT US';
+    link.appendChild(span);
+    contactUsBlock.appendChild(link);
+    contactUsParentBlock.appendChild(contactUsBlock);
   }
 }
