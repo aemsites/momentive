@@ -6,6 +6,7 @@
 
   --nav-section-max-width-768: 350px;
   --sub-nav-list-bg-gray-color: #6f6f6f;
+  --product-sub-list-items-per-col: 13;
 
   --blue: #0082cb;
   --red: #c30e2e;
@@ -169,6 +170,7 @@
     gap: calc(100vw/15);
     cursor: pointer;
     margin: 0;
+    /*height: 4rem;*/
   }
 
   .nav-sections a {
@@ -183,20 +185,23 @@
     flex: 0 1 auto;
     position: relative;
     font-weight: 800;
+    /*border-bottom: 10px solid transparent;*/
   }
 
-  nav[aria-expanded="false"] .nav-sections .default-content-wrapper > ul > li > ul  {
+  .default-content-wrapper > ul > li > ul  {
     display: none;
     position: relative;
   }
 
+  /* common styles for sub-nav-list */
   .nav-sections .default-content-wrapper ul.sub-nav-list[aria-expanded="true"] {
     display: flex;
+    list-style: none;
     flex-direction: column;
     white-space: nowrap;
     position: absolute;
     text-align: left;
-    margin-top: 0.5rem;
+    margin-top: 0.1rem;
     width: fit-content;
     height: auto;
     background-color: var(--menu-bg-color);
@@ -211,22 +216,30 @@
     z-index: 10;
   }
 
+  /* products sub-nav style */
   .nav-sections ul.sub-nav-list.product-sub-list[aria-expanded='true'] {
     position: absolute;
     display: flex;
     white-space: pre-wrap;
     flex-direction: row;
     gap: 2rem;
-    margin-left: calc(-120vw/20);
+    margin-left: -6vw;
     overflow: auto;
+  }
+
+  .nav-sections ul.sub-nav-list.product-sub-list[aria-expanded='true'] > li {
+    border-right: 1px solid var(--light-gray);
+  }
+
+  .nav-sections ul.sub-nav-list.product-sub-list[aria-expanded='true'] > li:last-child {
+    border-right: none;
   }
 
   .nav-sections ul.product-sub-sub-list {
     margin-top: 0;
-    border-right: 1px solid var(--light-gray);
     padding-right: 0.5rem;
     display: grid;
-    grid-template-rows: repeat(13, auto);
+    grid-template-rows: repeat(var(--product-sub-list-items-per-col), auto);
     grid-auto-flow: column;
     grid-gap: 0;
     /*grid-column-gap: 0rem;*/
