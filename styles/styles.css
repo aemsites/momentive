@@ -33,6 +33,14 @@
   /* Used in CTA buttons */
   --orange: #fd8e02;
 
+  /* Used in the info hightlights background */
+  --strong-red: #c30d2e;
+  --reddish-pink: #a10419;
+  --dark-navy-blue: #0082cb;
+  --cyan-blue: #239ee3;
+  --vivid-orange-warm: #fd8204;
+  --vivid-orange: #cf6000;
+
 
   /* fonts */
   --body-font-family: var(--avenir-regular), roboto, roboto-fallback;
@@ -233,18 +241,18 @@ main img {
 
 /* sections */
 main .section {
-  padding: 64px 16px;
+  padding: 0 0 16px;
 }
 
 @media (width >= 600px) {
   main .section {
-    padding: 64px 32px;
+    padding: 0 0 32px;
   }
 }
 
 @media (width >= 900px) {
   main {
-    max-width: 1650px;
+    max-width: 100%;
     margin: 50px auto 0;
   }
 }
