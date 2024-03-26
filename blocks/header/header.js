@@ -58,6 +58,7 @@ function createTranslateMenu() {
 }
 
 function handleSecondaryNavForMobView(item, listItems) {
+  if (isDesktop.matches) return;
   const expanded = item.getAttribute('aria-expanded') === 'true' ? 'false' : 'true';
   item.setAttribute('aria-expanded', expanded);
 
@@ -138,8 +139,8 @@ function addEventsToNavItems(nav) {
         });
         item.setAttribute('data-mouse-hover-listener-added', 'true');
       }
-    } else if (!isDesktop.matches) {
-      const clickListenerAdded = item.getAttribute('data-clk-listener-added');
+    } else {
+      const clickListenerAdded = item.getAttribute('data-clk-listener-added') || 'false';
       if (clickListenerAdded === 'false') {
         item.addEventListener('click', () => {
           handleSecondaryNavForMobView(item, listItems);
@@ -155,9 +156,11 @@ function createPrimaryNavForMobView(nav) {
 
   const mobileNavExists = nav.getAttribute('mobile-nav');
   if (mobileNavExists) return;
-  const productsSubList = nav.querySelector('.nav-sections .default-content-wrapper > ul > li > ul');
-  const listItems = productsSubList.querySelectorAll('li');
 
+  const productsSubList = nav.querySelector('.nav-sections .default-content-wrapper > ul > li > ul');
+  if (productsSubList === null) return;
+
+  const listItems = productsSubList.querySelectorAll('li');
   // Add classes based on the text content of the list items
   listItems.forEach((item) => {
     // Create a new i element and set its class to "arrow right"
@@ -186,37 +189,7 @@ function createPrimaryNavForMobView(nav) {
 
 // Restore nav list items on window resize from mobile to desktop
 function restoreNavOnWindowResize() {
-  const nav = document.getElementById('nav');
-  // const expanded = nav.getAttribute('aria-expanded') === 'true';
-  nav.setAttribute('aria-expanded', 'false');
-  if (nav.getAttribute('mobile-nav') === null) return;
-  const navList = nav.querySelector('.nav-sections .default-content-wrapper > ul');
-  if (navList === null) return;
-  const listItems = navList.querySelectorAll('li');
-
-  const productsSubList = document.createElement('ul');
-  // Remove classes based on the text content of the list items
-  listItems.forEach((item) => {
-    if (item.textContent.includes('PRODUCT CATEGORIES')) {
-      item.classList.remove('secondary-nav-header', 'secondary-nav-product-categories');
-      item.removeChild(item.querySelector('.arrow-right'));
-      productsSubList.append(item);
-    } else if (item.textContent.includes('INDUSTRIES')) {
-      item.classList.remove('secondary-nav-header', 'secondary-nav-industries');
-      item.removeChild(item.querySelector('.arrow-right'));
-      productsSubList.append(item);
-    } else if (item.textContent.includes('BRAND')) {
-      item.classList.remove('secondary-nav-header', 'secondary-nav-brand');
-      item.removeChild(item.querySelector('.arrow-right'));
-      productsSubList.append(item);
-    }
-  });
-
-  if (productsSubList.children.length === 0) return;
-
-  const productListItem = nav.querySelector('.nav-sections .default-content-wrapper > ul > li');
-  productListItem.appendChild(productsSubList);
-  nav.removeAttribute('mobile-nav');
+  location.reload();
 }
 
 // Header top bar having brand logo, language selection, login, search and hamburger icon
