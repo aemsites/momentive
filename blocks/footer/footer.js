@@ -23,7 +23,7 @@ export default async function decorate(block) {
   const mainSections = footerMain.querySelectorAll('h3');
   mainSections.forEach((h3) => {
     // Identify the next <ul> before any changes
-    const nextUl = h3.nextElementSibling && h3.nextElementSibling.tagName === 'UL'
+    const nextUl = h3.nextElementSibling?.tagName === 'UL'
       ? h3.nextElementSibling
       : null;
 
