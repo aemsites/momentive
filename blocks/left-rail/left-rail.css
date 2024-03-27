@@ -10,8 +10,15 @@ body .left-rail-wrapper {
   overflow:visible;
 }
 
+body .left-rail {
+  background-color: rgba(0 0 0 / 50%);
+  transition: background-color ease .2s;
+}
+
 body .left-rail:not(:has(:checked)) {
   pointer-events: none;
+  background-color: rgba(0 0 0 / 0%);
+  transition: background-color ease .2s;
 }
 
 body .left-rail .rail-content {
