@@ -121,6 +121,7 @@ async function loadEager(doc) {
   if (main) {
     decorateMain(main);
     document.body.classList.add('appear');
+    applyTemplateDefaultContent(main);
     await waitForLCP(LCP_BLOCKS);
   }
 
@@ -148,8 +149,6 @@ async function loadLazy(doc) {
 
   loadHeader(doc.querySelector('header'));
   loadFooter(doc.querySelector('footer'));
-
-  await applyTemplateDefaultContent(main);
 
   loadCSS(`${window.hlx.codeBasePath}/styles/lazy-styles.css`);
   loadFonts();

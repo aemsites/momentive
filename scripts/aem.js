@@ -708,6 +708,8 @@ function createElement(tagName, attributes, ...children) {
   children.forEach((child) => {
     if (typeof child === 'string') {
       el.appendChild(document.createTextNode(child));
+    } else if (Array.isArray(child)) {
+      child.forEach((c) => el.appendChild(c));
     } else if (child) {
       el.appendChild(child);
     }
