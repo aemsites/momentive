@@ -1,5 +1,5 @@
 .block.documents {
-    padding: 2em calc(100% - 890px);
+    padding: 2em calc(50% - 400px);
 }
 
 .block.documents.technical {

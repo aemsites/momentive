@@ -6,6 +6,7 @@ import {
 async function decorateTechnicalDocuments(block) {
   const placeholders = await fetchPlaceholders();
   const documents = [...block.querySelectorAll('a')];
+  documents.forEach((document) => document.classList.add('button'));
   documents.unshift(createElement('h2', { id: 'technical-documents' }, placeholders.technicalDocuments));
   return documents;
 }
