@@ -155,7 +155,7 @@ export default {
       '.cookie-banner',
       '.elc_explore-button',
       '.embeddedServiceHelpButton',
-      '.mydoc+.mydocuments',
+      '.mydoc:has(+.mydocuments)',
       '.scroll-anchor',
       '.slide-in-container',
       '#btnProdLit',

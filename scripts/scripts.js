@@ -30,6 +30,13 @@ function buildHeroBlock(main) {
   if (h1 && picture && (h1.compareDocumentPosition(picture) & Node.DOCUMENT_POSITION_PRECEDING)) {
     main.prepend(createElement('div', {}, buildBlock('hero', { elems: [picture, h1] })));
   } else if (h1) {
+    // Check if there are any siblings after h1, if so move them into a new section
+    const next = h1.nextElementSibling;
+    if (next) {
+      const firstSection = h1.parentElement;
+      const heroSection = createElement('section', { class: 'section' }, h1);
+      firstSection.parentElement.prepend(heroSection);
+    }
     h1.parentElement.classList.add('plain-hero');
   }
 }
