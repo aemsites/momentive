@@ -13,6 +13,18 @@ export default async function decorate(block) {
   const body = config.body || false;
   const embed = config.embed || false;
 
+  // ---- Move all other sections into a sub-div so we can position the rail alongside it all.
+  const allSections = [...document.querySelectorAll('main .section')];
+  allSections.shift();
+  const contentBody = createElement('div', { class: 'content-body' });
+  block.parentElement.parentElement.append(contentBody);
+  contentBody.appendChild(block.parentElement);
+  const mainContent = createElement('div', { class: 'main-content' });
+  contentBody.appendChild(mainContent);
+  allSections.forEach((section) => {
+    mainContent.appendChild(section);
+  });
+
   document.body.classList.add('with-left-rail');
   // Build out left rail, starting with the toggle
   const railContent = createElement('div', { class: 'rail-content' });
@@ -40,10 +52,13 @@ export default async function decorate(block) {
   }
 
   if (embed) {
-    const fragmentBlock = buildBlock('fragment', `<a href='${embed}'/>`);
+    const fragmentBlock = buildBlock('fragment', `<a href='${embed}' style='display:none'/>`);
     railContent.appendChild(fragmentBlock);
-    decorateBlock(fragmentBlock);
-    loadBlock(fragmentBlock);
+    // Delay this until after first paint
+    setTimeout(() => {
+      decorateBlock(fragmentBlock);
+      loadBlock(fragmentBlock);
+    }, 100);
   }
 
   if (body) {
@@ -51,18 +66,6 @@ export default async function decorate(block) {
   }
 
   block.replaceChildren(rail);
-
-  // ---- Move all other sections into a sub-div so we can position the rail alongside it all.
-  const allSections = [...document.querySelectorAll('main .section')];
-  allSections.shift();
-  const contentBody = createElement('div', { class: 'content-body' });
-  block.parentElement.parentElement.append(contentBody);
-  contentBody.appendChild(block.parentElement);
-  const mainContent = createElement('div', { class: 'main-content' });
-  contentBody.appendChild(mainContent);
-  allSections.forEach((section) => {
-    mainContent.appendChild(section);
-  });
 
   return block;
 }

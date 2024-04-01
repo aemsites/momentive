@@ -18,6 +18,7 @@
 
 @font-face{
   font-family:"Avenir Next Cyr W00 Medium";
+  font-display: swap;
   src:url("/fonts/Avenir-Next-Cyr-W00-Medium.eot");
   src:url("/fonts/Avenir-Next-Cyr-W00-Medium.eot") format("eot"),
   url("/fonts/Avenir-Next-Cyr-W00-Medium.woff2") format("woff2"),
@@ -28,6 +29,7 @@
 
 @font-face{
   font-family:"Avenir Next Cyr W00 Demi";
+  font-display: swap;
   src:url("/fonts/Avenir-Next-Cyr-W00-Demi.eot");
   src:url("/fonts/Avenir-Next-Cyr-W00-Demi.eot") format("eot"),
   url("/fonts/Avenir-Next-Cyr-W00-Demi.woff2") format("woff2"),
@@ -38,6 +40,7 @@
 
 @font-face{
   font-family:"Avenir Next Cyr W00 Regular";
+  font-display: swap;
   src:url("/fonts/Avenir-Next-Cyr-W00-Regular.eot");
   src:url("/fonts/Avenir-Next-Cyr-W00-Regular.eot") format("eot"),
   url("/fonts/Avenir-Next-Cyr-W00-Regular.woff2") format("woff2"),
@@ -49,6 +52,7 @@
 @font-face{
   font-family:"Avenir Next Cyr W00 Bold";
   font-weight: bold;
+  font-display: swap;
   src:url("/fonts/Avenir-Next-Cyr-W00-Bold.eot");
   src:url("/fonts/Avenir-Next-Cyr-W00-Bold.eot") format("eot"),
   url("/fonts/Avenir-Next-Cyr-W00-Bold.woff2") format("woff2"),

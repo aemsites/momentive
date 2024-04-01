@@ -10,6 +10,17 @@ body .left-rail-wrapper {
   overflow:visible;
 }
 
+body .left-rail {
+  background-color: rgba(0 0 0 / 50%);
+  transition: background-color ease .2s;
+}
+
+body .left-rail:not(:has(:checked)) {
+  pointer-events: none;
+  background-color: rgba(0 0 0 / 0%);
+  transition: background-color ease .2s;
+}
+
 body .left-rail .rail-content {
   background-color: var(--off-white);
   font-weight: 100;
@@ -95,6 +106,16 @@ body .left-rail a.button.secondary {
   color: var(--navy-blue);
 }
 
+body .left-rail li a:any-link:not(.button):hover {
+  color: var(--med-gray);
+  text-decoration: none;
+}
+
+body .left-rail a.button.secondary:hover {
+  background-color: var(--med-gray);
+  color: var(--background-color);
+}
+
 @media (width >= 900px) {
   body.with-left-rail .content-body {
     display: grid;
@@ -113,6 +134,10 @@ body .left-rail a.button.secondary {
     background-color: var(--off-white);
   }
 
+  body .left-rail:not(:has(:checked)) {
+    pointer-events: all;
+  }
+  
   body .left-rail .left-rail-toggle {
     display: none;
   }

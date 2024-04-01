@@ -30,6 +30,13 @@ function buildHeroBlock(main) {
   if (h1 && picture && (h1.compareDocumentPosition(picture) & Node.DOCUMENT_POSITION_PRECEDING)) {
     main.prepend(createElement('div', {}, buildBlock('hero', { elems: [picture, h1] })));
   } else if (h1) {
+    // Check if there are any siblings after h1, if so move them into a new section
+    const next = h1.nextElementSibling;
+    if (next) {
+      const firstSection = h1.parentElement;
+      const heroSection = createElement('section', { class: 'section' }, h1);
+      firstSection.parentElement.prepend(heroSection);
+    }
     h1.parentElement.classList.add('plain-hero');
   }
 }
@@ -114,6 +121,7 @@ async function loadEager(doc) {
   if (main) {
     decorateMain(main);
     document.body.classList.add('appear');
+    applyTemplateDefaultContent(main);
     await waitForLCP(LCP_BLOCKS);
   }
 
@@ -141,8 +149,6 @@ async function loadLazy(doc) {
 
   loadHeader(doc.querySelector('header'));
   loadFooter(doc.querySelector('footer'));
-
-  await applyTemplateDefaultContent(main);
 
   loadCSS(`${window.hlx.codeBasePath}/styles/lazy-styles.css`);
   loadFonts();
