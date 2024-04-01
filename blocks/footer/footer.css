@@ -22,7 +22,7 @@ footer .footer {
   justify-content: space-between; 
   flex-flow: row wrap; 
   gap: 20px; 
-  padding-bottom: 64px;
+  padding: 40px 0 64px;
 }
 
 
@@ -60,7 +60,8 @@ footer .footer {
 
 .footer-column {
   flex-grow: 1; 
-  min-width: 200px; 
+  flex-basis: 25%;
+  max-width: 25%;
   padding-left: 40px;
 }
 
@@ -168,4 +169,48 @@ footer .footer {
 
 .footer-social-wrapper li, .footer-languages-wrapper li {
   padding: 0 10px;
+}
+
+@media (width <= 900px) {
+  .footer-main {
+    flex-direction: column;
+  }
+
+  .footer-column {
+    flex-basis: 100%;
+    margin-bottom: 20px;
+  }
+
+  .footer-column h3.toggle {
+    cursor: pointer;
+    position: relative;
+  }
+
+  .footer-column h3.toggle::before {
+    content: '';
+    display: inline-block;
+    width: 16px;
+    height: 16px; 
+    background-image: url('/styles/icons/right-angle-icon.svg');
+    background-size: cover;
+    position: absolute;
+    left: -20px;
+    top: 50%;
+    transform: translateY(-50%);
+    transition: transform 0.3s ease;
+  }
+
+  .footer-column h3.expanded::before {
+    transform: translateY(-50%) rotate(90deg);
+  }
+
+  .footer-column ul.hidden {
+    display: none;
+  }
+
+  .footer-column ul.expanded {
+    display: block;
+    margin-top: 10px; 
+    transition: all 0.3s ease; /* Smooth transition for expanding */
+  }
 }
