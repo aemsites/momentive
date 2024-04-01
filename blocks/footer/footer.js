@@ -6,7 +6,6 @@ import { loadFragment } from '../fragment/fragment.js';
  * @param {Element} block The footer block element
  */
 export default async function decorate(block) {
-  console.log('decorating footer', block);
   const footerMeta = getMetadata('footer');
   block.textContent = '';
 
