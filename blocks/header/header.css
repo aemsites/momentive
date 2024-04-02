@@ -1,15 +1,15 @@
 :root {
   --nav-primary-font-family: var(--avenir-bold);
   --nav-primary-font-size: var(--body-font-size-xxs);
-  --menu-bg-color: #888;
-  --translate-menu-font-color: #212529;
-  --translate-menu-hover-bg-color: #65646a;
   --nav-brand-top-margin: 0.25rem;
   --nav-section-max-width-768: 350px;
-  --nav-secondary-highlight-gray-color: #6f6f6f;
   --products-items-per-col: 13;
   --blue: #0082cb;
   --red: #c30e2e;
+  --nav-secondary-highlight-gray-color: #6f6f6f;
+  --menu-bg-color: #888;
+  --translate-menu-font-color: #212529;
+  --translate-menu-hover-bg-color: #65646a;
 }
 
 /* Nav Brand section */
