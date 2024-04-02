@@ -48,6 +48,10 @@ footer .footer {
   color: var(--background-color);
 }
 
+.footer-social a {
+  margin-left: 20px;
+}
+
 .footer a:hover {
   color: var(--footer-link-hover-color);
 }
@@ -141,12 +145,12 @@ footer .footer {
 .footer-social-wrapper p {
   font-size: .85em;
   margin: 0;
-  padding-right: 20px;
   color: var(--background-color);
 }
 
 .footer-languages-wrapper {
   justify-content: flex-end;
+  white-space: nowrap;
 }
 
 .footer-social-wrapper, .footer-languages-wrapper {
@@ -169,6 +173,11 @@ footer .footer {
 
 .footer-social-wrapper li, .footer-languages-wrapper li {
   padding: 0 10px;
+}
+
+.footer-social img {
+  width: 40px;
+  height: 40px;
 }
 
 @media (width <= 900px) {
@@ -212,5 +221,38 @@ footer .footer {
     display: block;
     margin-top: 10px; 
     transition: all 0.3s ease; /* Smooth transition for expanding */
+  }
+
+  .footer-social img {
+    display: inline-block;
+    vertical-align: middle;
+    width: 30px;
+    height: 30px;
+    margin-left: 15px;
+  }
+
+  .footer-social-row, .footer-languages-row {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .footer-social-wrapper,
+  .footer-languages-wrapper {
+    width: 100%;
+    justify-content: center; 
+    margin-bottom: 10px;
+  }
+
+  .footer-sublinks-wrapper ul li:last-child {
+    width: 100%;
+    text-align: center;
+    order: 1; /* Make it appear last */
+    padding-top: 20px; /* Add some space above the copyright */
+  }
+
+  .footer-sublinks-wrapper ul {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
   }
 }
