@@ -1,4 +1,6 @@
 :root {
+  --nav-primary-font-family: var(--avenir-bold);
+  --nav-primary-font-size: var(--body-font-size-xxs);
   --menu-bg-color: #888;
   --translate-menu-font-color: #212529;
   --translate-menu-hover-bg-color: #65646a;
@@ -172,9 +174,9 @@ nav a.button:any-link {
     grid-area: sections;
     flex: 1 1 auto;
     background-color: var(--light-gray);
-    font-family: var(--avenir-bold);
+    font-family: var(--nav-primary-font-family);
     font-weight: 500;
-    font-size: var(--body-font-size-xxs);
+    font-size: var(--nav-primary-font-size);
     line-height: 3.2rem;
     color: var(--navy-blue);
   }
@@ -182,7 +184,8 @@ nav a.button:any-link {
   .nav-primary ol {
     display: flex;
     padding-left: 0;
-    justify-content: space-around;
+    justify-content: center;
+    gap: calc(100vw/15);
     cursor: pointer;
     margin: 0;
   }
@@ -372,6 +375,9 @@ nav a.button:any-link {
     width: 65%;
     height: 100%;
     background-color: var(--menu-bg-color);
+    font-family: var(--nav-primary-font-family);
+    font-weight: 500;
+    font-size: var(--nav-primary-font-size);
     transition: right 0.3s ease;
     z-index: 2;
   }
@@ -391,7 +397,6 @@ nav a.button:any-link {
     list-style: none;
     display: flex;
     flex-direction: column;
-    font-size: var(--body-font-size-xs);
     color: var(--navy-blue);
     position: relative;
     margin-left: -2.5rem;

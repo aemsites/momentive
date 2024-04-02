@@ -55,10 +55,10 @@ function isMouseInsideSecondaryNav(secondaryNav, event) {
   const secondaryNavRect = secondaryNav.getBoundingClientRect();
   const secondaryNavMarginTop = 16;
   return (
-    event.clientX >= secondaryNavRect.left &&
-    event.clientX <= secondaryNavRect.right &&
-    event.clientY >= (secondaryNavRect.top - secondaryNavMarginTop) &&
-    event.clientY <= secondaryNavRect.bottom
+    event.clientX >= secondaryNavRect.left
+    && event.clientX <= secondaryNavRect.right
+    && event.clientY >= (secondaryNavRect.top - secondaryNavMarginTop)
+    && event.clientY <= secondaryNavRect.bottom
   );
 }
 
@@ -74,7 +74,7 @@ function toggleSecondaryNavForMobView(nav, item, index, listItems) {
   if (isDesktop.matches) return;
 
   // Get the child list of the clicked list item
-  const secondaryNavSelector = `.nav-secondary[data-position-mobile="${index+1}"]`;
+  const secondaryNavSelector = `.nav-secondary[data-position-mobile="${index + 1}"]`;
   const secondaryNav = nav.querySelector(secondaryNavSelector);
   if (secondaryNav === null) return;
   const expanded = item.getAttribute('aria-expanded') === 'true' ? 'false' : 'true';
@@ -99,7 +99,7 @@ function toggleSecondaryNavForMobView(nav, item, index, listItems) {
 }
 
 function toggleSecondaryNavForDesktop(nav, item, index, event) {
-  const secondaryNav = nav.querySelector(`.nav-secondary[data-position-desktop="${index+1}"]`);
+  const secondaryNav = nav.querySelector(`.nav-secondary[data-position-desktop="${index + 1}"]`);
   if (secondaryNav === null) return;
   const expanded = secondaryNav.getAttribute('aria-expanded') === 'true' ? 'false' : 'true';
   if (expanded === 'false') {
@@ -107,10 +107,10 @@ function toggleSecondaryNavForDesktop(nav, item, index, event) {
     secondaryNav.setAttribute('aria-expanded', 'false');
   } else {
     const secondaryNavClasses = Array.from(secondaryNav.classList);
-    if (!secondaryNavClasses.includes('nav-secondary-products') &&
-      !secondaryNavClasses.includes('nav-secondary-order-products')) {
+    if (!secondaryNavClasses.includes('nav-secondary-products')
+      && !secondaryNavClasses.includes('nav-secondary-order-products')) {
       // Set the left position of secondaryNav relative to hoveredListItem
-      const primaryNavListItems = nav.querySelectorAll('.nav-primary ol li');
+      const primaryNavListItems = nav.querySelectorAll('.nav-primary[data-view="desktop"] ol li');
       const hoveredListItem = primaryNavListItems[index];
       const hoveredListItemRect = hoveredListItem.getBoundingClientRect();
       const leftPosition = hoveredListItemRect.left;
@@ -137,7 +137,7 @@ function addEventsToNavListItems(nav) {
       }
 
       // Close the secondary nav when mouse leaves the secondaryNav
-      const secondaryNav = nav.querySelector(`.nav-secondary[data-position-desktop="${index+1}"]`);
+      const secondaryNav = nav.querySelector(`.nav-secondary[data-position-desktop="${index + 1}"]`);
       if (secondaryNav === null) return;
       const mouseLeaveListenerAdded = secondaryNav.getAttribute('data-mouse-leave-listener-added') || 'false';
       if (mouseLeaveListenerAdded === 'false') {
@@ -181,12 +181,12 @@ function applyCustomStyleToColumns(nav) {
     const pairs = customStyleValue.split(',');
 
     // For each pair, split it based on ':' to get the column number and style
-    pairs.forEach(pair => {
+    pairs.forEach((pair) => {
       const splitPair = pair.trim().split(':');
       const columnNumber = splitPair[0].trim();
       const style = splitPair[1].trim();
 
-      const columnDiv = customColumnStyleElement.querySelector('.columns[data-block-name="columns"] > div > div:nth-child(' + columnNumber + ')');
+      const columnDiv = customColumnStyleElement.querySelector(`.columns[data-block-name='columns'] > div > div:nth-child(${columnNumber})`);
       if (columnDiv === null) return;
       columnDiv.classList.add(style);
     });
@@ -201,12 +201,12 @@ function applyCustomStyleToListItems(nav) {
     const pairs = customStyleValue.split(',');
 
     // For each pair, split it based on ':' to get the column number and style
-    pairs.forEach(pair => {
+    pairs.forEach((pair) => {
       const splitPair = pair.trim().split(':');
       const listItemNumber = splitPair[0].trim();
       const style = splitPair[1].trim();
 
-      const listItem = customListItemStyleElement.querySelector('ol > li:nth-child(' + listItemNumber + ')');
+      const listItem = customListItemStyleElement.querySelector(`ol > li:nth-child(${listItemNumber})`);
       if (listItem === null) return;
       listItem.classList.add(style);
     });
