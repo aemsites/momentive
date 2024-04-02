@@ -1,21 +1,17 @@
 import { getMetadata } from '../../scripts/aem.js';
 import { loadFragment } from '../fragment/fragment.js';
 
+const LOGO_SRC = '/images/mpm_logo_white_color_v_tag_long_sml.png';
+const LOGO_ALT = 'Momentive Performance Materials Logo';
+const LOGIN_URL = 'https://www.momentive.com/en-us/login';
+const LOGIN_TEXT = 'LOG IN / REGISTER';
+const SEARCH_URL = '#';
+const SEARCH_TEXT = 'SEARCH';
+const TRANSLATE_LANGUAGES = ['zh-cn', 'de-de', 'ja-jp', 'pt-br', 'es-mx', 'ko-kr'];
+const TRANSLATE_LANG_NAMES = ['中文', 'Deutsch', '日本語', 'Português', 'Español', '한국어'];
+
 // media query match that indicates mobile/tablet width
 const isDesktop = window.matchMedia('(min-width: 900px)');
-
-/**
- * Toggles the entire nav
- * @param {Element} nav The container element
- * @param {Element} navSections The nav sections within the container element
- * @param {*} forceExpanded Optional param to force nav expand behavior when not null
- */
-function toggleMenu(nav, navSections, forceExpanded = null) {
-  const expanded = forceExpanded !== null ? !forceExpanded : nav.getAttribute('aria-expanded') === 'true';
-  document.body.style.overflowY = (expanded || isDesktop.matches) ? '' : 'hidden';
-  nav.setAttribute('aria-expanded', expanded ? 'false' : 'true');
-  navSections.setAttribute('aria-expanded', expanded ? 'false' : 'true');
-}
 
 function createTranslateMenu() {
   const translateMenu = document.createElement('div');
@@ -31,14 +27,12 @@ function createTranslateMenu() {
   languagesDialog.style.display = 'none';
 
   // add the language options to the languages dialog
-  const languages = ['zh-cn', 'de-de', 'ja-jp', 'pt-br', 'es-mx', 'ko-kr'];
-  const languageNames = ['中文', 'Deutsch', '日本語', 'Português', 'Español', '한국어'];
-  languages.forEach((language, index) => {
+  TRANSLATE_LANGUAGES.forEach((language, index) => {
     const li = document.createElement('li');
     const a = document.createElement('a');
     a.dataset.url = 'null';
     // a.onclick = () => fnChangeLanguage(language);
-    a.textContent = languageNames[index];
+    a.textContent = TRANSLATE_LANG_NAMES[index];
     li.append(a);
     languagesDialog.append(li);
   });
@@ -57,139 +51,171 @@ function createTranslateMenu() {
   return translateMenu;
 }
 
-function handleSecondaryNavForMobView(item, listItems) {
+function isMouseInsideSecondaryNav(secondaryNav, event) {
+  const secondaryNavRect = secondaryNav.getBoundingClientRect();
+  const secondaryNavMarginTop = 16;
+  return (
+    event.clientX >= secondaryNavRect.left &&
+    event.clientX <= secondaryNavRect.right &&
+    event.clientY >= (secondaryNavRect.top - secondaryNavMarginTop) &&
+    event.clientY <= secondaryNavRect.bottom
+  );
+}
+
+function togglePrimaryNavForMobView(nav) {
+  const navPrimary = nav.querySelector('.nav-primary[data-view="mobile"]');
+  const expanded = nav.getAttribute('aria-expanded') === 'true';
+  document.body.style.overflowY = (expanded || isDesktop.matches) ? '' : 'hidden';
+  nav.setAttribute('aria-expanded', expanded ? 'false' : 'true');
+  navPrimary.setAttribute('aria-expanded', expanded ? 'false' : 'true');
+}
+
+function toggleSecondaryNavForMobView(nav, item, index, listItems) {
   if (isDesktop.matches) return;
+
+  // Get the child list of the clicked list item
+  const secondaryNavSelector = `.nav-secondary[data-position-mobile="${index+1}"]`;
+  const secondaryNav = nav.querySelector(secondaryNavSelector);
+  if (secondaryNav === null) return;
   const expanded = item.getAttribute('aria-expanded') === 'true' ? 'false' : 'true';
   item.setAttribute('aria-expanded', expanded);
 
-  // Get the child list of the clicked list item
-  const childList = item.querySelector('ul');
-
   if (expanded === 'true') {
+    // If 'aria-expanded' is 'true', hide the other list items
     listItems.forEach((siblingItem) => {
       if (siblingItem !== item) {
         siblingItem.style.display = 'none';
       }
     });
-    if (childList) {
-      childList.classList.add('sub-nav-list');
-      childList.style.display = 'block';
-      if (item.textContent.includes('ORDER PRODUCTS')) {
-        const secondLevelList = childList.querySelector('ul');
-        secondLevelList.classList.add('order-products-sub-list');
-      }
-    }
+    secondaryNav.style.display = 'block';
   } else {
     // If 'aria-expanded' is 'false', display all list items
     listItems.forEach((siblingItem) => {
       siblingItem.style.display = 'block';
     });
-
-    if (childList) {
-      childList.classList.add('sub-nav-list');
-      childList.style.display = 'none';
-    }
+    secondaryNav.style.display = 'none';
   }
+  secondaryNav.setAttribute('aria-expanded', expanded);
 }
 
-function handleSecondaryNavForDesktop(nav, item) {
-  const subList = item.querySelector('ul');
-  const expanded = subList.getAttribute('aria-expanded') === 'true' ? 'false' : 'true';
+function toggleSecondaryNavForDesktop(nav, item, index, event) {
+  const secondaryNav = nav.querySelector(`.nav-secondary[data-position-desktop="${index+1}"]`);
+  if (secondaryNav === null) return;
+  const expanded = secondaryNav.getAttribute('aria-expanded') === 'true' ? 'false' : 'true';
   if (expanded === 'false') {
-    subList.setAttribute('aria-expanded', 'false');
+    if (isMouseInsideSecondaryNav(secondaryNav, event)) return;
+    secondaryNav.setAttribute('aria-expanded', 'false');
   } else {
-    subList.setAttribute('aria-expanded', 'true');
-    subList.className = 'sub-nav-list';
-    if (item.textContent.startsWith('PRODUCTS')) {
-      subList.classList.add('product-sub-list');
-      const secondLevelLists = subList.querySelectorAll('ul');
-      if (secondLevelLists.length > 0) {
-        secondLevelLists.forEach((secondLevelList) => {
-          secondLevelList.classList.add('product-sub-sub-list');
-        });
-      }
-      // const secondLevelListItem = subList.querySelector('li');
-      const listItems = Array.from(subList.querySelectorAll('li'));
-      const productCategoriesListItem = listItems.find((li) => li.textContent.startsWith('PRODUCT CATEGORIES'));
-      productCategoriesListItem.classList.add('product-categories-list-item');
-      const industriesListItem = listItems.find((li) => li.textContent.startsWith('INDUSTRIES'));
-      industriesListItem.classList.add('industries-list-item');
-      const brandListItem = listItems.find((li) => li.textContent.startsWith('BRAND'));
-      brandListItem.classList.add('brand-list-item');
-    } else if (item.textContent.startsWith('ORDER PRODUCTS')) {
-      subList.classList.add('order-products-sub-list');
-      const orderProductsSubList = subList.querySelector('li > ul');
-      orderProductsSubList.classList.add('order-products-list-item');
+    const secondaryNavClasses = Array.from(secondaryNav.classList);
+    if (!secondaryNavClasses.includes('nav-secondary-products') &&
+      !secondaryNavClasses.includes('nav-secondary-order-products')) {
+      // Set the left position of secondaryNav relative to hoveredListItem
+      const primaryNavListItems = nav.querySelectorAll('.nav-primary ol li');
+      const hoveredListItem = primaryNavListItems[index];
+      const hoveredListItemRect = hoveredListItem.getBoundingClientRect();
+      const leftPosition = hoveredListItemRect.left;
+      secondaryNav.style.marginLeft = `${leftPosition}px`;
     }
+    // Open the secondaryNav
+    secondaryNav.setAttribute('aria-expanded', 'true');
   }
 }
 
-function addEventsToNavItems(nav) {
-  const listItems = nav.querySelectorAll('.nav-sections .default-content-wrapper > ul > li');
-
-  listItems.forEach((item) => {
-    if (isDesktop.matches) {
+function addEventsToNavListItems(nav) {
+  if (isDesktop.matches) {
+    const listItems = nav.querySelectorAll('.nav-primary[data-view="desktop"] ol li');
+    listItems.forEach((item, index) => {
       const mouseHoverListenersAdded = item.getAttribute('data-mouse-hover-listener-added') || 'false';
       if (mouseHoverListenersAdded === 'false') {
-        item.addEventListener('mouseenter', () => {
-          handleSecondaryNavForDesktop(nav, item);
+        item.addEventListener('mouseenter', (event) => {
+          toggleSecondaryNavForDesktop(nav, item, index, event);
         });
-        item.addEventListener('mouseleave', () => {
-          handleSecondaryNavForDesktop(nav, item);
+        item.addEventListener('mouseout', (event) => {
+          toggleSecondaryNavForDesktop(nav, item, index, event);
         });
         item.setAttribute('data-mouse-hover-listener-added', 'true');
       }
-    } else {
+
+      // Close the secondary nav when mouse leaves the secondaryNav
+      const secondaryNav = nav.querySelector(`.nav-secondary[data-position-desktop="${index+1}"]`);
+      if (secondaryNav === null) return;
+      const mouseLeaveListenerAdded = secondaryNav.getAttribute('data-mouse-leave-listener-added') || 'false';
+      if (mouseLeaveListenerAdded === 'false') {
+        secondaryNav.addEventListener('mouseleave', () => {
+          secondaryNav.setAttribute('aria-expanded', 'false');
+        });
+        secondaryNav.setAttribute('data-mouse-leave-listener-added', 'true');
+      }
+    });
+  } else {
+    const listItems = nav.querySelectorAll('.nav-primary[data-view="mobile"] ol li');
+    listItems.forEach((item, index) => {
       const clickListenerAdded = item.getAttribute('data-clk-listener-added') || 'false';
       if (clickListenerAdded === 'false') {
         item.addEventListener('click', () => {
-          handleSecondaryNavForMobView(item, listItems);
+          toggleSecondaryNavForMobView(nav, item, index, listItems);
         });
         item.setAttribute('data-clk-listener-added', 'true');
       }
-    }
+    });
+  }
+}
+
+function updatePrimaryNavVisibilityByViewType(nav) {
+  const primaryNavMob = nav.querySelector('.nav-primary[data-view="mobile"]');
+  const primaryNavDesktop = nav.querySelector('.nav-primary[data-view="desktop"]');
+  if (isDesktop.matches) {
+    primaryNavDesktop.style.display = 'block';
+    primaryNavMob.style.display = 'none';
+  } else {
+    primaryNavMob.style.display = 'block';
+    primaryNavDesktop.style.display = 'none';
+  }
+}
+
+function applyCustomStyleToColumns(nav) {
+  const customColumnStyleElements = nav.querySelectorAll('div[data-style-column]');
+  customColumnStyleElements.forEach((customColumnStyleElement) => {
+    const customStyleValue = customColumnStyleElement.getAttribute('data-style-column');
+    // Split the customStyleValue based on ','
+    const pairs = customStyleValue.split(',');
+
+    // For each pair, split it based on ':' to get the column number and style
+    pairs.forEach(pair => {
+      const splitPair = pair.trim().split(':');
+      const columnNumber = splitPair[0].trim();
+      const style = splitPair[1].trim();
+
+      const columnDiv = customColumnStyleElement.querySelector('.columns[data-block-name="columns"] > div > div:nth-child(' + columnNumber + ')');
+      if (columnDiv === null) return;
+      columnDiv.classList.add(style);
+    });
   });
 }
 
-function createPrimaryNavForMobView(nav) {
-  if (isDesktop.matches) return;
+function applyCustomStyleToListItems(nav) {
+  const customListItemStyleElements = nav.querySelectorAll('div[data-style-list-item]');
+  customListItemStyleElements.forEach((customListItemStyleElement) => {
+    const customStyleValue = customListItemStyleElement.getAttribute('data-style-list-item');
+    // Split the customStyleValue based on ','
+    const pairs = customStyleValue.split(',');
 
-  const mobileNavExists = nav.getAttribute('mobile-nav');
-  if (mobileNavExists) return;
+    // For each pair, split it based on ':' to get the column number and style
+    pairs.forEach(pair => {
+      const splitPair = pair.trim().split(':');
+      const listItemNumber = splitPair[0].trim();
+      const style = splitPair[1].trim();
 
-  const productsSubList = nav.querySelector('.nav-sections .default-content-wrapper > ul > li > ul');
-  if (productsSubList === null) return;
-
-  const listItems = productsSubList.querySelectorAll('li');
-  // Add classes based on the text content of the list items
-  listItems.forEach((item) => {
-    // Create a new i element and set its class to "arrow right"
-    const arrowElement = document.createElement('i');
-    arrowElement.className = 'arrow-right';
-    if (item.textContent.includes('PRODUCT CATEGORIES')) {
-      item.classList.add('secondary-nav-header', 'secondary-nav-product-categories');
-      item.appendChild(arrowElement);
-    } else if (item.textContent.includes('INDUSTRIES')) {
-      item.classList.add('secondary-nav-header', 'secondary-nav-industries');
-      item.appendChild(arrowElement);
-    } else if (item.textContent.includes('BRAND')) {
-      item.classList.add('secondary-nav-header', 'secondary-nav-brand');
-      item.appendChild(arrowElement);
-    }
+      const listItem = customListItemStyleElement.querySelector('ol > li:nth-child(' + listItemNumber + ')');
+      if (listItem === null) return;
+      listItem.classList.add(style);
+    });
   });
-
-  const productsSubListHTML = Array.from(productsSubList.children).map((child) => child.outerHTML).join('');
-  const productsListItem = nav.querySelector('.nav-sections .default-content-wrapper > ul > li');
-  productsListItem.setAttribute('aria-expanded', 'true');
-  productsSubList.remove();
-  productsListItem.insertAdjacentHTML('afterend', productsSubListHTML);
-  nav.setAttribute('mobile-nav', true);
-  addEventsToNavItems(nav);
 }
 
-// Restore nav list items on window resize from mobile to desktop
-function restoreNavOnWindowResize() {
-  location.reload();
+function decorateNavWithCustomStyles(nav) {
+  applyCustomStyleToColumns(nav);
+  applyCustomStyleToListItems(nav);
 }
 
 // Header top bar having brand logo, language selection, login, search and hamburger icon
@@ -199,7 +225,8 @@ function decorateNavBrandBar(nav) {
   logoLink.href = '/';
 
   const logo = document.createElement('img');
-  logo.src = '/images/mpm_logo_white_color_v_tag_long_sml.png';
+  logo.src = LOGO_SRC;
+  logo.alt = LOGO_ALT;
   logo.classList.add('logo');
   logoLink.append(logo);
   navBrand.append(logoLink);
@@ -213,36 +240,36 @@ function decorateNavBrandBar(nav) {
 
   const loginIcon = document.createElement('a');
   loginIcon.classList.add('icon-login');
-  loginIcon.href = 'https://www.momentive.com/en-us/login';
+  loginIcon.href = LOGIN_URL;
 
   const loginText = document.createElement('a');
   loginText.classList.add('text-login');
-  loginText.textContent = 'LOG IN / REGISTER';
-  loginText.href = 'https://www.momentive.com/en-us/login';
+  loginText.textContent = LOGIN_TEXT;
+  loginText.href = LOGIN_URL;
 
   const searchIcon = document.createElement('a');
   searchIcon.classList.add('icon-search');
-  searchIcon.href = '#';
+  searchIcon.href = SEARCH_URL;
 
   const searchText = document.createElement('a');
   searchText.classList.add('text-search');
-  searchText.textContent = 'SEARCH';
-  searchText.href = '#';
+  searchText.textContent = SEARCH_TEXT;
+  searchText.href = SEARCH_URL;
 
   // hamburger for mobile view
   const hamburgerIcon = document.createElement('div');
-  hamburgerIcon.classList.add('nav-hamburger-icon');
   hamburgerIcon.addEventListener('click', () => {
-    const navSections = nav.querySelector('.nav-sections');
-    createPrimaryNavForMobView(nav);
-    toggleMenu(nav, navSections);
+    togglePrimaryNavForMobView(nav);
   });
+  hamburgerIcon.classList.add('nav-hamburger-icon');
   nav.setAttribute('aria-expanded', 'false');
 
   brandRight.append(loginIcon, loginText, searchIcon, searchText, hamburgerIcon);
   navBrand.append(brandRight);
+  navBrand.classList.add('nav-brand');
   return navBrand;
 }
+
 
 /**
  * decorates the header, mainly the nav
@@ -262,21 +289,14 @@ export default async function decorate(block) {
   nav.append(navBrand);
 
   while (fragment.firstElementChild) nav.append(fragment.firstElementChild);
-  const classes = ['brand', 'sections'];
-  classes.forEach((c, i) => {
-    const section = nav.children[i];
-    if (section) section.classList.add(`nav-${c}`);
-  });
 
-  if (isDesktop.matches) {
-    addEventsToNavItems(nav);
-  }
+  updatePrimaryNavVisibilityByViewType(nav);
+  decorateNavWithCustomStyles(nav);
+  addEventsToNavListItems(nav);
+
   window.addEventListener('resize', () => {
-    if (window.matchMedia('(max-width: 900px)').matches) {
-      createPrimaryNavForMobView(nav);
-    } else {
-      restoreNavOnWindowResize();
-    }
+    updatePrimaryNavVisibilityByViewType(nav);
+    addEventsToNavListItems(nav);
   });
 
   const navWrapper = document.createElement('div');
