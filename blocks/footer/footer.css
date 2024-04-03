@@ -211,8 +211,8 @@ footer .footer {
     transform: translateY(-50%) rotate(90deg);
   }
 
-  .footer-column ul.hidden {
-    display: none;
+  .footer-column ul {
+    display: none; /* Hide all <ul> by default */
   }
 
   .footer-column ul.expanded {

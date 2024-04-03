@@ -31,21 +31,17 @@ export default async function decorate(block) {
     if (nextUl) {
       wrapperDiv.appendChild(nextUl);
       h3.classList.add('toggle');
-      nextUl.classList.add('hidden'); // Initially hide the `ul` elements
 
       // Event listener for toggling visibility and ensuring only one dropdown is open at a time
       h3.addEventListener('click', () => {
         const isExpanded = nextUl.classList.toggle('expanded');
-        h3.classList.toggle('expanded', isExpanded); // Toggle class on `h3` for icon rotation
-        nextUl.classList.toggle('hidden');
-
+        h3.classList.toggle('expanded', isExpanded);
         // Close any currently open dropdowns
         const expandedSections = footer.querySelectorAll('.footer-column ul.expanded');
-        expandedSections.forEach((e) => {
-          if (e !== nextUl) {
-            e.classList.remove('expanded');
-            e.previousElementSibling.classList.remove('expanded'); // Remove 'expanded' from `h3` as well
-            e.classList.add('hidden');
+        expandedSections.forEach((s) => {
+          if (s !== nextUl) {
+            s.classList.remove('expanded');
+            s.previousElementSibling.classList.remove('expanded');
           }
         });
       });
