@@ -1,55 +1,18 @@
-import { getMetadata } from '../../scripts/aem.js';
+import {
+	createElement,
+	fetchPlaceholders,
+	getMetadata
+} from '../../scripts/aem.js';
 import { loadFragment } from '../fragment/fragment.js';
 
 const LOGO_SRC = '/images/mpm_logo_white_color_v_tag_long_sml.png';
-const LOGO_ALT = 'Momentive Performance Materials Logo';
 const LOGIN_URL = 'https://www.momentive.com/en-us/login';
-const LOGIN_TEXT = 'LOG IN / REGISTER';
 const SEARCH_URL = '#';
-const SEARCH_TEXT = 'SEARCH';
 const TRANSLATE_LANGUAGES = ['zh-cn', 'de-de', 'ja-jp', 'pt-br', 'es-mx', 'ko-kr'];
 const TRANSLATE_LANG_NAMES = ['中文', 'Deutsch', '日本語', 'Português', 'Español', '한국어'];
 
 // media query match that indicates mobile/tablet width
 const isDesktop = window.matchMedia('(min-width: 900px)');
-
-function createTranslateMenu() {
-  const translateMenu = document.createElement('div');
-  translateMenu.classList.add('translate-menu');
-
-  const translateIcon = document.createElement('a');
-  translateIcon.classList.add('translate-icon');
-
-  // create ul element for the languages dialog
-  const languagesDialog = document.createElement('ul');
-  languagesDialog.id = 'LanguageId';
-  languagesDialog.classList.add('lang-submenu', 'anchor-cursor');
-  languagesDialog.style.display = 'none';
-
-  // add the language options to the languages dialog
-  TRANSLATE_LANGUAGES.forEach((language, index) => {
-    const li = document.createElement('li');
-    const a = document.createElement('a');
-    a.dataset.url = 'null';
-    // a.onclick = () => fnChangeLanguage(language);
-    a.textContent = TRANSLATE_LANG_NAMES[index];
-    li.append(a);
-    languagesDialog.append(li);
-  });
-
-  translateIcon.addEventListener('click', () => {
-    if (languagesDialog.style.display === 'none') {
-      languagesDialog.style.display = 'block';
-      languagesDialog.style.position = 'fixed'; // dialog overlay
-    } else {
-      languagesDialog.style.display = 'none';
-      languagesDialog.style.position = 'static';
-    }
-  });
-
-  translateMenu.append(translateIcon, languagesDialog);
-  return translateMenu;
-}
 
 function isMouseInsideSecondaryNav(secondaryNav, event) {
   const secondaryNavRect = secondaryNav.getBoundingClientRect();
@@ -73,7 +36,6 @@ function togglePrimaryNavForMobView(nav) {
 function toggleSecondaryNavForMobView(nav, item, index, listItems) {
   if (isDesktop.matches) return;
 
-  // Get the child list of the clicked list item
   const secondaryNavSelector = `.nav-secondary[data-position-mobile="${index + 1}"]`;
   const secondaryNav = nav.querySelector(secondaryNavSelector);
   if (secondaryNav === null) return;
@@ -218,56 +180,48 @@ function decorateNavWithCustomStyles(nav) {
   applyCustomStyleToListItems(nav);
 }
 
+function createTranslateMenu() {
+	const translateIcon = createElement('a', {class: 'translate-icon'});
+	const languagesDialog = createElement('ul', {id: 'translateDialog', class: 'lang-submenu anchor-cursor', style: 'display: none;'});
+
+  // add the language options to the languages dialog
+  TRANSLATE_LANGUAGES.forEach((language, index) => {
+		const a = createElement('a', {href: '#'});
+		a.textContent = TRANSLATE_LANG_NAMES[index];
+		const li = createElement('li', {}, a);
+    languagesDialog.append(li);
+  });
+
+  translateIcon.addEventListener('click', () => {
+    if (languagesDialog.style.display === 'none') {
+      languagesDialog.style.display = 'block';
+      languagesDialog.style.position = 'fixed'; // dialog overlay
+    } else {
+      languagesDialog.style.display = 'none';
+      languagesDialog.style.position = 'static';
+    }
+  });
+
+	return createElement('div', {class: 'translate-menu'}, translateIcon, languagesDialog);
+}
+
 // Header top bar having brand logo, language selection, login, search and hamburger icon
-function decorateNavBrandBar(nav) {
-  const navBrand = document.createElement('div');
-  const logoLink = document.createElement('a');
-  logoLink.href = '/';
-
-  const logo = document.createElement('img');
-  logo.src = LOGO_SRC;
-  logo.alt = LOGO_ALT;
-  logo.classList.add('logo');
-  logoLink.append(logo);
-  navBrand.append(logoLink);
-
-  // create a div for the right side of the brand div
-  const brandRight = document.createElement('div');
-  brandRight.classList.add('nav-brand-right');
-
-  const translateMenu = createTranslateMenu(nav, brandRight);
-  brandRight.append(translateMenu);
-
-  const loginIcon = document.createElement('a');
-  loginIcon.classList.add('icon-login');
-  loginIcon.href = LOGIN_URL;
-
-  const loginText = document.createElement('a');
-  loginText.classList.add('text-login');
-  loginText.textContent = LOGIN_TEXT;
-  loginText.href = LOGIN_URL;
-
-  const searchIcon = document.createElement('a');
-  searchIcon.classList.add('icon-search');
-  searchIcon.href = SEARCH_URL;
-
-  const searchText = document.createElement('a');
-  searchText.classList.add('text-search');
-  searchText.textContent = SEARCH_TEXT;
-  searchText.href = SEARCH_URL;
-
-  // hamburger for mobile view
-  const hamburgerIcon = document.createElement('div');
+async function decorateNavBrandBar(nav) {
+	const placeHolders = await fetchPlaceholders();
+  const logo = createElement('img', {src: LOGO_SRC, alt: placeHolders.navLogoAlt, class: 'logo'});
+	const logoLink = createElement('a', {href: '/'}, logo);
+  const translateMenu = createTranslateMenu(nav);
+	const loginIcon = createElement('a', {class: 'icon-login', href: LOGIN_URL});
+	const loginText = createElement('a', {class: 'text-login', href: LOGIN_URL}, placeHolders.navLogin);
+	const searchIcon = createElement('a', {class: 'icon-search', href: SEARCH_URL});
+	const searchText = createElement('a', {class: 'text-search', href: SEARCH_URL}, placeHolders.navSearch);
+	const hamburgerIcon = createElement('div', {class: 'nav-hamburger-icon'});
   hamburgerIcon.addEventListener('click', () => {
     togglePrimaryNavForMobView(nav);
   });
-  hamburgerIcon.classList.add('nav-hamburger-icon');
   nav.setAttribute('aria-expanded', 'false');
-
-  brandRight.append(loginIcon, loginText, searchIcon, searchText, hamburgerIcon);
-  navBrand.append(brandRight);
-  navBrand.classList.add('nav-brand');
-  return navBrand;
+	const brandRight = createElement('div', {class: 'nav-brand-right'}, translateMenu, loginIcon, loginText, searchIcon, searchText, hamburgerIcon);
+	return createElement('div', {class: 'nav-brand'}, logoLink, brandRight);
 }
 
 /**
@@ -280,13 +234,9 @@ export default async function decorate(block) {
   const navPath = navMeta ? new URL(navMeta).pathname : '/nav';
   const fragment = await loadFragment(navPath);
 
-  // decorate nav DOM
-  const nav = document.createElement('nav');
-  nav.id = 'nav';
-
-  const navBrand = decorateNavBrandBar(nav);
+  const nav = createElement('nav', {id: 'nav'});
+  const navBrand = await decorateNavBrandBar(nav);
   nav.append(navBrand);
-
   while (fragment.firstElementChild) nav.append(fragment.firstElementChild);
 
   updatePrimaryNavVisibilityByViewType(nav);
@@ -298,8 +248,6 @@ export default async function decorate(block) {
     addEventsToNavListItems(nav);
   });
 
-  const navWrapper = document.createElement('div');
-  navWrapper.className = 'nav-wrapper';
-  navWrapper.append(nav);
+	const navWrapper = createElement('div', {class: 'nav-wrapper'}, nav);
   block.append(navWrapper);
 }
