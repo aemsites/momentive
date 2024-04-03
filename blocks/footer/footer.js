@@ -9,13 +9,63 @@ export default async function decorate(block) {
   const footerMeta = getMetadata('footer');
   block.textContent = '';
 
-  // load footer fragment
   const footerPath = footerMeta.footer || '/footer';
   const fragment = await loadFragment(footerPath);
 
-  // decorate footer DOM
   const footer = document.createElement('div');
   while (fragment.firstElementChild) footer.append(fragment.firstElementChild);
+
+  // Directly select the .footer-main container to append the columns to
+  const footerMain = footer.querySelector('.footer-main');
+  const section = footer.querySelector('.section');
+
+  // Find each <h3> within .footer-main
+  const mainSections = footerMain.querySelectorAll('h3');
+  mainSections.forEach((h3) => {
+    const nextUl = h3.nextElementSibling?.tagName === 'UL' ? h3.nextElementSibling : null;
+
+    const wrapperDiv = document.createElement('div');
+    wrapperDiv.classList.add('footer-column');
+
+    wrapperDiv.appendChild(h3);
+    if (nextUl) {
+      wrapperDiv.appendChild(nextUl);
+      h3.classList.add('toggle');
+
+      // Event listener for toggling visibility and ensuring only one dropdown is open at a time
+      h3.addEventListener('click', () => {
+        const isExpanded = nextUl.classList.toggle('expanded');
+        h3.classList.toggle('expanded', isExpanded);
+        // Close any currently open dropdowns
+        const expandedSections = footer.querySelectorAll('.footer-column ul.expanded');
+        expandedSections.forEach((s) => {
+          if (s !== nextUl) {
+            s.classList.remove('expanded');
+            s.previousElementSibling.classList.remove('expanded');
+          }
+        });
+      });
+    }
+
+    footerMain.appendChild(wrapperDiv);
+  });
+
+  // Container for footer-social and footer-languages
+  const socialLanguagesContainer = document.createElement('div');
+  socialLanguagesContainer.classList.add('footer-social-row');
+
+  const footerSocial = footer.querySelector('.footer-social-wrapper');
+  const footerLanguages = footer.querySelector('.footer-languages-wrapper');
+
+  socialLanguagesContainer.appendChild(footerSocial);
+  socialLanguagesContainer.appendChild(footerLanguages);
+  section.appendChild(socialLanguagesContainer);
+
+  const sublinksContentContainer = document.createElement('div');
+  sublinksContentContainer.classList.add('footer-sublinks-row');
+  const footerSublinks = footer.querySelector('.footer-sublinks-wrapper');
+  sublinksContentContainer.appendChild(footerSublinks);
+  section.appendChild(sublinksContentContainer);
 
   block.append(footer);
 }
