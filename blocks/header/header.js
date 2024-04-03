@@ -1,7 +1,7 @@
 import {
-	createElement,
-	fetchPlaceholders,
-	getMetadata
+  createElement,
+  fetchPlaceholders,
+  getMetadata,
 } from '../../scripts/aem.js';
 import { loadFragment } from '../fragment/fragment.js';
 
@@ -181,14 +181,14 @@ function decorateNavWithCustomStyles(nav) {
 }
 
 function createTranslateMenu() {
-	const translateIcon = createElement('a', {class: 'translate-icon'});
-	const languagesDialog = createElement('ul', {id: 'translateDialog', class: 'lang-submenu anchor-cursor', style: 'display: none;'});
+  const translateIcon = createElement('a', { class: 'translate-icon' });
+  const languagesDialog = createElement('ul', { id: 'translateDialog', class: 'lang-submenu anchor-cursor', style: 'display: none;' });
 
   // add the language options to the languages dialog
   TRANSLATE_LANGUAGES.forEach((language, index) => {
-		const a = createElement('a', {href: '#'});
-		a.textContent = TRANSLATE_LANG_NAMES[index];
-		const li = createElement('li', {}, a);
+    const a = createElement('a', { href: '#' });
+    a.textContent = TRANSLATE_LANG_NAMES[index];
+    const li = createElement('li', {}, a);
     languagesDialog.append(li);
   });
 
@@ -202,26 +202,26 @@ function createTranslateMenu() {
     }
   });
 
-	return createElement('div', {class: 'translate-menu'}, translateIcon, languagesDialog);
+  return createElement('div', { class: 'translate-menu' }, translateIcon, languagesDialog);
 }
 
 // Header top bar having brand logo, language selection, login, search and hamburger icon
 async function decorateNavBrandBar(nav) {
-	const placeHolders = await fetchPlaceholders();
-  const logo = createElement('img', {src: LOGO_SRC, alt: placeHolders.navLogoAlt, class: 'logo'});
-	const logoLink = createElement('a', {href: '/'}, logo);
+  const placeHolders = await fetchPlaceholders();
+  const logo = createElement('img', { src: LOGO_SRC, alt: placeHolders.navLogoAlt, class: 'logo' });
+  const logoLink = createElement('a', { href: '/' }, logo);
   const translateMenu = createTranslateMenu(nav);
-	const loginIcon = createElement('a', {class: 'icon-login', href: LOGIN_URL});
-	const loginText = createElement('a', {class: 'text-login', href: LOGIN_URL}, placeHolders.navLogin);
-	const searchIcon = createElement('a', {class: 'icon-search', href: SEARCH_URL});
-	const searchText = createElement('a', {class: 'text-search', href: SEARCH_URL}, placeHolders.navSearch);
-	const hamburgerIcon = createElement('div', {class: 'nav-hamburger-icon'});
+  const loginIcon = createElement('a', { class: 'icon-login', href: LOGIN_URL });
+  const loginText = createElement('a', { class: 'text-login', href: LOGIN_URL }, placeHolders.navLogin);
+  const searchIcon = createElement('a', { class: 'icon-search', href: SEARCH_URL });
+  const searchText = createElement('a', { class: 'text-search', href: SEARCH_URL }, placeHolders.navSearch);
+  const hamburgerIcon = createElement('div', { class: 'nav-hamburger-icon' });
   hamburgerIcon.addEventListener('click', () => {
     togglePrimaryNavForMobView(nav);
   });
   nav.setAttribute('aria-expanded', 'false');
-	const brandRight = createElement('div', {class: 'nav-brand-right'}, translateMenu, loginIcon, loginText, searchIcon, searchText, hamburgerIcon);
-	return createElement('div', {class: 'nav-brand'}, logoLink, brandRight);
+  const brandRight = createElement('div', { class: 'nav-brand-right' }, translateMenu, loginIcon, loginText, searchIcon, searchText, hamburgerIcon);
+  return createElement('div', { class: 'nav-brand' }, logoLink, brandRight);
 }
 
 /**
@@ -234,7 +234,7 @@ export default async function decorate(block) {
   const navPath = navMeta ? new URL(navMeta).pathname : '/nav';
   const fragment = await loadFragment(navPath);
 
-  const nav = createElement('nav', {id: 'nav'});
+  const nav = createElement('nav', { id: 'nav' });
   const navBrand = await decorateNavBrandBar(nav);
   nav.append(navBrand);
   while (fragment.firstElementChild) nav.append(fragment.firstElementChild);
@@ -248,6 +248,6 @@ export default async function decorate(block) {
     addEventsToNavListItems(nav);
   });
 
-	const navWrapper = createElement('div', {class: 'nav-wrapper'}, nav);
+  const navWrapper = createElement('div', { class: 'nav-wrapper' }, nav);
   block.append(navWrapper);
 }
