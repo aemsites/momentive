@@ -66,6 +66,57 @@ function buildAutoBlocks(main) {
   }
 }
 
+function createBreadcrumbItem(href, label, isLast = false) {
+  const li = document.createElement('li');
+  if (!isLast) {
+    const a = document.createElement('a');
+    a.classList.add('breadcrumb-item');
+    a.href = href;
+    a.textContent = ` / ${label}`;
+    li.appendChild(a);
+  } else {
+    // If it's the last item, just add the text without a link
+    li.textContent = ` / ${label}`;
+  }
+  return li;
+}
+
+/**
+ * Builds breadcrumb menu and returns it.
+ * @returns {HTMLElement} Newly created breadcrumb.
+ */
+export function buildBreadcrumb() {
+  const path = window.location.pathname;
+
+  if (path === '/' || document.title === '404') {
+    return undefined;
+  }
+
+  const pathSegments = path.split('/').filter(Boolean);
+  const list = document.createElement('ul');
+  list.classList.add('breadcrumb-list');
+  let baseUrl = '';
+
+  // Iterate through each segment except the last one
+  pathSegments.slice(1, -1).forEach((segment) => {
+    baseUrl += `/${segment}`;
+    const label = segment === pathSegments[1] ? segment.replace('-', ' ') : segment;
+    list.appendChild(createBreadcrumbItem(baseUrl, label));
+  });
+
+  // Handle the last segment separately without creating a link
+  if (pathSegments.length > 1) { // Check to ensure there's at least one segment after domain part
+    const lastSegment = pathSegments[pathSegments.length - 1];
+    list.appendChild(createBreadcrumbItem('', lastSegment, true)); // Pass true for isLast parameter
+  }
+
+  const breadcrumb = document.createElement('div');
+  breadcrumb.classList.add('breadcrumb');
+  breadcrumb.appendChild(list);
+
+  return breadcrumb;
+}
+
 /**
  * Decorates the main element.
  * @param {Element} main The main element
@@ -122,6 +173,7 @@ async function loadEager(doc) {
     decorateMain(main);
     document.body.classList.add('appear');
     applyTemplateDefaultContent(main);
+    buildBreadcrumb();
     await waitForLCP(LCP_BLOCKS);
   }
 
