@@ -204,13 +204,13 @@ a.button.secondary, button.secondary {
 }
 
 .navy a.button.secondary, .dark a.button.secondary,
-.navy button.secondar, .dark button.secondary {  
+.navy button.secondar, .dark button.secondary {
   border-color: var(--background-color);
   color: var(--background-color);
 }
 
 .navy a.button.secondary:hover, .dark a.button.secondary:hover,
-.navy button.secondary:hover, .dark button.secondary:hover {  
+.navy button.secondary:hover, .dark button.secondary:hover {
   filter: none;
   border-color: rgb(255 255 255 / 60%)
 }

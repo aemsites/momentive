@@ -18,6 +18,29 @@ import {
 } from './aem.js';
 
 const LCP_BLOCKS = []; // add your LCP blocks to the list
+const PAGE_TYPE_PRODUCT = 'product';
+const PAGE_TYPE_PRODUCT_LIST = 'productlist';
+
+function getPageType() {
+  const bodyClasses = document.body.classList;
+  if (bodyClasses.contains('product')) {
+    return PAGE_TYPE_PRODUCT;
+  } if (bodyClasses.contains('productlist')) {
+    return PAGE_TYPE_PRODUCT_LIST;
+  }
+  return 'default';
+}
+
+function addBreadcrumb(main) {
+  const pageType = getPageType();
+  if (pageType !== PAGE_TYPE_PRODUCT && pageType !== PAGE_TYPE_PRODUCT_LIST) return;
+  const breadcrumbBlock = buildBlock('breadcrumb', '');
+  const breadcrumb = createElement('div', {}, breadcrumbBlock);
+  // Append before the first section
+  main.firstElementChild.before(breadcrumb);
+  decorateBlock(breadcrumbBlock);
+  loadBlock(breadcrumbBlock);
+}
 
 /**
  * Builds hero block and prepends to main in a new section.
@@ -32,6 +55,27 @@ function buildHeroBlock(main) {
   } else if (h1) {
     // Check if there are any siblings after h1, if so move them into a new section
     const next = h1.nextElementSibling;
+    if (next) {
+      const firstSection = h1.parentElement;
+      const heroSection = createElement('section', { class: 'section' }, h1);
+      firstSection.parentElement.prepend(heroSection);
+    }
+    h1.parentElement.classList.add('plain-hero');
+  }
+}
+
+function buildHeroBlockProductList(main) {
+  const h1 = main.querySelector('h1');
+  const picture = main.querySelector('picture');
+  const next = h1 && h1.nextElementSibling;
+  const isNextSiblingText = next && next.tagName === 'P' && next.textContent.trim().length > 0;
+  // eslint-disable-next-line no-bitwise
+  if ((h1 && picture && (h1.compareDocumentPosition(picture) & Node.DOCUMENT_POSITION_PRECEDING))
+    || isNextSiblingText) {
+    const heroBlockChildren = isNextSiblingText ? [picture, h1, next] : [picture, h1];
+    main.prepend(createElement('div', {}, buildBlock('hero', { elems: heroBlockChildren })));
+  } else if (h1) {
+    // Check if there are any siblings after h1, if so move them into a new section
     if (next) {
       const firstSection = h1.parentElement;
       const heroSection = createElement('section', { class: 'section' }, h1);
@@ -59,7 +103,12 @@ async function loadFonts() {
  */
 function buildAutoBlocks(main) {
   try {
-    buildHeroBlock(main);
+    const pageType = getPageType();
+    if (pageType === PAGE_TYPE_PRODUCT_LIST) {
+      buildHeroBlockProductList(main);
+    } else {
+      buildHeroBlock(main);
+    }
   } catch (error) {
     // eslint-disable-next-line no-console
     console.error('Auto Blocking failed', error);
@@ -99,15 +148,8 @@ async function applyTemplateDefaultContent(main) {
     main.firstElementChild.after(leftRail);
     decorateBlock(leftRailBlock);
     loadBlock(leftRailBlock);
-
-    // ---- Add breadcrumb
-    const breadcrumbBlock = buildBlock('breadcrumb', '');
-    const breadcrumb = createElement('div', {}, breadcrumbBlock);
-    // Append before the first section
-    main.firstElementChild.before(breadcrumb);
-    decorateBlock(breadcrumbBlock);
-    loadBlock(breadcrumbBlock);
   }
+  addBreadcrumb(main);
 }
 
 /**
