@@ -67,11 +67,12 @@ function buildHeroBlock(main) {
 function buildHeroBlockProductList(main) {
   const h1 = main.querySelector('h1');
   const picture = main.querySelector('picture');
-  const next = h1.nextElementSibling;
+  const next = h1 && h1.nextElementSibling;
+  const isNextSiblingText = next && next.tagName === 'P' && next.textContent.trim().length > 0;
   // eslint-disable-next-line no-bitwise
   if ((h1 && picture && (h1.compareDocumentPosition(picture) & Node.DOCUMENT_POSITION_PRECEDING))
-    || (h1 && next && next.tagName === 'P')) {
-    const heroBlockChildren = (next.tagName === 'P') ? [picture, h1, next] : [picture, h1];
+    || isNextSiblingText) {
+    const heroBlockChildren = isNextSiblingText ? [picture, h1, next] : [picture, h1];
     main.prepend(createElement('div', {}, buildBlock('hero', { elems: heroBlockChildren })));
   } else if (h1) {
     // Check if there are any siblings after h1, if so move them into a new section
