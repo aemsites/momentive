@@ -58,9 +58,26 @@ function buildHeroBlock(main) {
     if (next) {
       const firstSection = h1.parentElement;
       const heroSection = createElement('section', { class: 'section' }, h1);
-      if (next.tagName === 'P' && getPageType() === PAGE_TYPE_PRODUCT_LIST) {
-        heroSection.append(next);
-      }
+      firstSection.parentElement.prepend(heroSection);
+    }
+    h1.parentElement.classList.add('plain-hero');
+  }
+}
+
+function buildHeroBlockProductList(main) {
+  const h1 = main.querySelector('h1');
+  const picture = main.querySelector('picture');
+  const next = h1.nextElementSibling;
+  // eslint-disable-next-line no-bitwise
+  if ((h1 && picture && (h1.compareDocumentPosition(picture) & Node.DOCUMENT_POSITION_PRECEDING))
+    || (h1 && next && next.tagName === 'P')) {
+    const heroBlockChildren = (next.tagName === 'P') ? [picture, h1, next] : [picture, h1];
+    main.prepend(createElement('div', {}, buildBlock('hero', { elems: heroBlockChildren })));
+  } else if (h1) {
+    // Check if there are any siblings after h1, if so move them into a new section
+    if (next) {
+      const firstSection = h1.parentElement;
+      const heroSection = createElement('section', { class: 'section' }, h1);
       firstSection.parentElement.prepend(heroSection);
     }
     h1.parentElement.classList.add('plain-hero');
@@ -85,7 +102,12 @@ async function loadFonts() {
  */
 function buildAutoBlocks(main) {
   try {
-    buildHeroBlock(main);
+    const pageType = getPageType();
+    if (pageType === PAGE_TYPE_PRODUCT_LIST) {
+      buildHeroBlockProductList(main);
+    } else {
+      buildHeroBlock(main);
+    }
   } catch (error) {
     // eslint-disable-next-line no-console
     console.error('Auto Blocking failed', error);
