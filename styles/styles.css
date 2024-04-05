@@ -204,13 +204,13 @@ a.button.secondary, button.secondary {
 }
 
 .navy a.button.secondary, .dark a.button.secondary,
-.navy button.secondar, .dark button.secondary {  
+.navy button.secondar, .dark button.secondary {
   border-color: var(--background-color);
   color: var(--background-color);
 }
 
 .navy a.button.secondary:hover, .dark a.button.secondary:hover,
-.navy button.secondary:hover, .dark button.secondary:hover {  
+.navy button.secondary:hover, .dark button.secondary:hover {
   filter: none;
   border-color: rgb(255 255 255 / 60%)
 }
@@ -282,7 +282,27 @@ main .section.navy, .section.plain-hero {
   padding-top: 0.25em;
 }
 
-.section.plain-hero h1::after {
+.productlist .section.plain-hero {
+  min-height: 12rem;
+}
+
+.productlist .section.plain-hero h1 {
+  text-align: left;
+  margin-left: 2rem;
+  padding-bottom: 0;
+  font-size: var(--heading-font-size-xl);
+  white-space: pre-wrap;
+}
+
+.productlist .section.plain-hero p {
+  position: absolute;
+  margin-left: 4vw;
+  font-size: var(--body-font-size-xs);
+  white-space: pre-wrap;
+  line-height: 1.5rem;
+}
+
+.product .section.plain-hero h1::after {
   content: " ";
   display: block;
   width: 1.5em;
@@ -290,4 +310,20 @@ main .section.navy, .section.plain-hero {
   margin: auto;
   margin-top: 0.25em;
   background-color: var(--orange);
+}
+
+@media (width >= 900px) {
+  .productlist .section.plain-hero {
+    min-height: 10rem;
+  }
+
+  .productlist .section.plain-hero h1 {
+    padding-top: 1rem;
+  }
+}
+
+@media (width < 450px) {
+  .productlist .section.plain-hero h1 {
+    font-size: var(--heading-font-size-l);
+  }
 }

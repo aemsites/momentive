@@ -18,6 +18,29 @@ import {
 } from './aem.js';
 
 const LCP_BLOCKS = []; // add your LCP blocks to the list
+const PAGE_TYPE_PRODUCT = 'product';
+const PAGE_TYPE_PRODUCT_LIST = 'productlist';
+
+function getPageType() {
+  const bodyClasses = document.body.classList;
+  if (bodyClasses.contains('product')) {
+    return PAGE_TYPE_PRODUCT;
+  } if (bodyClasses.contains('productlist')) {
+    return PAGE_TYPE_PRODUCT_LIST;
+  }
+  return 'default';
+}
+
+function addBreadcrumb(main) {
+  const pageType = getPageType();
+  if (pageType !== PAGE_TYPE_PRODUCT && pageType !== PAGE_TYPE_PRODUCT_LIST) return;
+  const breadcrumbBlock = buildBlock('breadcrumb', '');
+  const breadcrumb = createElement('div', {}, breadcrumbBlock);
+  // Append before the first section
+  main.firstElementChild.before(breadcrumb);
+  decorateBlock(breadcrumbBlock);
+  loadBlock(breadcrumbBlock);
+}
 
 /**
  * Builds hero block and prepends to main in a new section.
@@ -35,6 +58,9 @@ function buildHeroBlock(main) {
     if (next) {
       const firstSection = h1.parentElement;
       const heroSection = createElement('section', { class: 'section' }, h1);
+      if (next.tagName === 'P' && getPageType() === PAGE_TYPE_PRODUCT_LIST) {
+        heroSection.append(next);
+      }
       firstSection.parentElement.prepend(heroSection);
     }
     h1.parentElement.classList.add('plain-hero');
@@ -99,15 +125,8 @@ async function applyTemplateDefaultContent(main) {
     main.firstElementChild.after(leftRail);
     decorateBlock(leftRailBlock);
     loadBlock(leftRailBlock);
-
-    // ---- Add breadcrumb
-    const breadcrumbBlock = buildBlock('breadcrumb', '');
-    const breadcrumb = createElement('div', {}, breadcrumbBlock);
-    // Append before the first section
-    main.firstElementChild.before(breadcrumb);
-    decorateBlock(breadcrumbBlock);
-    loadBlock(breadcrumbBlock);
   }
+  addBreadcrumb(main);
 }
 
 /**
