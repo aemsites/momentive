@@ -42,6 +42,9 @@
   --vivid-orange-warm: #fd8204;
   --vivid-orange: #cf6000;
 
+  /* Used in latest news block */
+  --blue-magenta: #65646a;
+  --dark-cyan-blue: #284d87;
 
   /* fonts */
   --body-font-family: var(--avenir-regular), roboto, roboto-fallback;
