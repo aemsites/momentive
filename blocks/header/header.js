@@ -5,12 +5,6 @@ import {
 } from '../../scripts/aem.js';
 import { loadFragment } from '../fragment/fragment.js';
 
-const LOGO_SRC = '/images/mpm_logo_white_color_v_tag_long_sml.png';
-const LOGIN_URL = 'https://www.momentive.com/en-us/login';
-const SEARCH_URL = '#';
-const TRANSLATE_LANGUAGES = ['zh-cn', 'de-de', 'ja-jp', 'pt-br', 'es-mx', 'ko-kr'];
-const TRANSLATE_LANG_NAMES = ['中文', 'Deutsch', '日本語', 'Português', 'Español', '한국어'];
-
 // media query match that indicates mobile/tablet width
 const isDesktop = window.matchMedia('(min-width: 900px)');
 
@@ -124,8 +118,8 @@ function addEventsToNavListItems(nav) {
 }
 
 function updatePrimaryNavVisibilityByViewType(nav) {
-  const primaryNavMob = nav.querySelector('.nav-primary[data-view="mobile"]');
   const primaryNavDesktop = nav.querySelector('.nav-primary[data-view="desktop"]');
+  const primaryNavMob = nav.querySelector('.nav-primary[data-view="mobile"]');
   if (isDesktop.matches) {
     primaryNavDesktop.style.display = 'block';
     primaryNavMob.style.display = 'none';
@@ -180,48 +174,18 @@ function decorateNavWithCustomStyles(nav) {
   applyCustomStyleToListItems(nav);
 }
 
-function createTranslateMenu() {
-  const translateIcon = createElement('a', { class: 'translate-icon' });
-  const languagesDialog = createElement('ul', { id: 'translateDialog', class: 'lang-submenu anchor-cursor', style: 'display: none;' });
-
-  // add the language options to the languages dialog
-  TRANSLATE_LANGUAGES.forEach((language, index) => {
-    const a = createElement('a', { href: '#' });
-    a.textContent = TRANSLATE_LANG_NAMES[index];
-    const li = createElement('li', {}, a);
-    languagesDialog.append(li);
-  });
-
-  translateIcon.addEventListener('click', () => {
-    if (languagesDialog.style.display === 'none') {
-      languagesDialog.style.display = 'block';
-      languagesDialog.style.position = 'fixed'; // dialog overlay
-    } else {
-      languagesDialog.style.display = 'none';
-      languagesDialog.style.position = 'static';
-    }
-  });
-
-  return createElement('div', { class: 'translate-menu' }, translateIcon, languagesDialog);
-}
-
-// Header top bar having brand logo, language selection, login, search and hamburger icon
+// Header top bar having brand logo, search and hamburger icon
 async function decorateNavBrandBar(nav) {
   const placeHolders = await fetchPlaceholders();
-  const logo = createElement('img', { src: LOGO_SRC, alt: placeHolders.navLogoAlt, class: 'logo' });
-  const logoLink = createElement('a', { href: '/' }, logo);
-  const translateMenu = createTranslateMenu(nav);
-  const loginIcon = createElement('a', { class: 'icon-login', href: LOGIN_URL });
-  const loginText = createElement('a', { class: 'text-login', href: LOGIN_URL }, placeHolders.navLogin);
-  const searchIcon = createElement('a', { class: 'icon-search', href: SEARCH_URL });
-  const searchText = createElement('a', { class: 'text-search', href: SEARCH_URL }, placeHolders.navSearch);
+  const searchInput = createElement('input', { type: 'text', placeholder: placeHolders.navSearchPlaceholder, class: 'search' });
   const hamburgerIcon = createElement('div', { class: 'nav-hamburger-icon' });
   hamburgerIcon.addEventListener('click', () => {
     togglePrimaryNavForMobView(nav);
   });
+  const navBrandRight = createElement('div', { class: 'nav-brand-right' }, searchInput, hamburgerIcon);
   nav.setAttribute('aria-expanded', 'false');
-  const brandRight = createElement('div', { class: 'nav-brand-right' }, translateMenu, loginIcon, loginText, searchIcon, searchText, hamburgerIcon);
-  return createElement('div', { class: 'nav-brand' }, logoLink, brandRight);
+  const navBrand = nav.querySelector('.nav-brand .default-content-wrapper');
+  navBrand.append(navBrandRight);
 }
 
 /**
@@ -231,14 +195,13 @@ async function decorateNavBrandBar(nav) {
 export default async function decorate(block) {
   // load nav as fragment
   const navMeta = getMetadata('nav');
-  const navPath = navMeta ? new URL(navMeta).pathname : '/nav';
+  const navPath = navMeta ? new URL(navMeta).pathname : '/drafts/anuj/header-impl/nav';
   const fragment = await loadFragment(navPath);
 
   const nav = createElement('nav', { id: 'nav' });
-  const navBrand = await decorateNavBrandBar(nav);
-  nav.append(navBrand);
   while (fragment.firstElementChild) nav.append(fragment.firstElementChild);
 
+  await decorateNavBrandBar(nav);
   updatePrimaryNavVisibilityByViewType(nav);
   decorateNavWithCustomStyles(nav);
   addEventsToNavListItems(nav);
