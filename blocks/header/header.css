@@ -11,6 +11,7 @@
   --nav-primary-bg-color: var(--light-gray);
   --nav-primary-font-color: #202020;
   --nav-secondary-font-color-mob: var(--nav-primary-font-color);
+  --nav-secondary-link-color-mob: var(--nav-primary-font-color);
   --nav-secondary-highlight-gray-color: #6f6f6f;
   --menu-bg-color: #888;
 }
@@ -30,7 +31,7 @@ nav a.button:any-link {
 }
 
 .nav-secondary a {
-  color: white;
+  color: var(--nav-secondary-link-color-mob);
 }
 
 /* Nav Brand section */
@@ -173,7 +174,7 @@ nav a.button:any-link {
   .nav-secondary.nav-secondary-products ul li {
     width: max-content;
     max-width: calc(100vw/7);
-    line-height: 0.8rem;
+    line-height: 1rem;
     text-align: left;
     padding: 0.5rem;
     white-space: pre-wrap;
