@@ -1,0 +1,42 @@
+.columns-grid > div   {
+  display: grid;
+}
+
+.columns-grid img {
+  width: 100%;
+}
+
+.columns-grid a.button:hover {
+  background-color: var(--dark-navy-blue);
+  color: var(--background-color);
+}
+
+.columns-grid.grid25x4 > div   {
+  grid-template-columns: 50% 50%;
+}
+
+.column-grid-content {
+  margin: 1rem;
+}
+
+@media (width >= 900px) {
+  .columns-grid.grid33-66 > div   {
+    grid-template-columns: 33.33% 66.66%;
+  }
+
+  .columns-grid.grid66-33 > div   {
+    grid-template-columns: 66.66% 33.33%;
+  }
+
+  .columns-grid.grid50x2 > div   {
+    grid-template-columns: 50% 50%;
+  }
+
+  .columns-grid.grid25x4 > div   {
+    grid-template-columns: 25% 25% 25% 25%;
+  }
+
+  .columns-grid.grid33x3 > div   {
+    grid-template-columns: 33.33% 33.33% 33.33%;
+  }
+}
