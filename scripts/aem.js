@@ -10,6 +10,9 @@
  * governing permissions and limitations under the License.
  */
 
+const SECTION_TYPE_TABS_GROUP = 'tabs-group';
+const SECTION_TYPE_TAB_CONTENT = 'tab-content';
+
 /* eslint-env browser */
 
 /**
@@ -293,6 +296,25 @@ function getMetadata(name, doc = document) {
   return meta || '';
 }
 
+function createElement(tagName, attributes, ...children) {
+  const el = document.createElement(tagName);
+  if (attributes) {
+    Object.keys(attributes).forEach((name) => {
+      el.setAttribute(name, attributes[name]);
+    });
+  }
+  children.forEach((child) => {
+    if (typeof child === 'string') {
+      el.appendChild(document.createTextNode(child));
+    } else if (Array.isArray(child)) {
+      child.forEach((c) => el.appendChild(c));
+    } else if (child) {
+      el.appendChild(child);
+    }
+  });
+  return el;
+}
+
 /**
  * Returns a picture element with webp and fallbacks
  * @param {string} src The image URL
@@ -441,11 +463,73 @@ function decorateIcons(element, prefix = '') {
   });
 }
 
+function openSelectedTab(tagsGroupSection, tabId, tabName) {
+  const tabContents = tagsGroupSection.querySelectorAll('.tab-content');
+  tabContents.forEach((tabContent) => {
+    tabContent.style.display = 'none';
+  });
+  const tabLinks = tagsGroupSection.querySelectorAll('.tab-link');
+  tabLinks.forEach((tabLink) => tabLink.classList.remove('active'));
+
+  const tabButton = tagsGroupSection.querySelector(`#${tabId}`);
+  tabButton.classList.add('active');
+  const tabContent = tagsGroupSection.querySelector(`[data-tab-name="${tabName}"]`);
+  tabContent.style.display = 'block';
+}
+
+function createTabButton(tabName, tagsGroupSection) {
+  const tabButtonId = tabName.replace(/\s/g, '-');
+  const tabButton = createElement('button', { id: tabButtonId, class: 'tab-link' });
+  tabButton.textContent = tabName;
+  tabButton.addEventListener('click', () => openSelectedTab(tagsGroupSection, tabButton.id, tabName));
+  return tabButton;
+}
+
+/**
+ * Decorates a tabs group section.
+ * It moves the immediate 'N' sibling sections under the tabs group section.
+ * It creates tab buttons and sets up event listeners to switch the tab & tab content.
+ * It also applies the necessary styling to the tabs section.
+ *
+ * @param {HTMLElement} tagsGroupSection - Tabs group section to be enhanced.
+ */
+function decorateTabsGroupSection(tagsGroupSection) {
+  const tabCount = Number(tagsGroupSection.getAttribute('data-count')) || 0;
+  if (tabCount === 0) return;
+
+  const tabContents = [];
+  const tabButtons = [];
+  let currentSection = tagsGroupSection;
+
+  for (let i = 0; i < tabCount; i += 1) {
+    const tabContent = currentSection.nextElementSibling;
+    if (!tabContent || tabContent.tagName !== 'DIV' || !tabContent.classList.contains(SECTION_TYPE_TAB_CONTENT)) {
+      break;
+    }
+
+    const tabName = tabContent.getAttribute('data-tab-name') || `Tab ${i + 1}`;
+    const tabButton = createTabButton(tabName, tagsGroupSection);
+
+    if (i === 0) {
+      tabContent.style.display = 'block';
+      tabButton.classList.add('active');
+    }
+
+    tabButtons.push(tabButton);
+    tabContents.push(tabContent);
+    currentSection = tabContent;
+  }
+
+  const tabButtonsWrapper = createElement('div', { class: 'tabs' }, ...tabButtons);
+  tagsGroupSection.append(tabButtonsWrapper, ...tabContents);
+}
+
 /**
  * Decorates all sections in a container element.
  * @param {Element} main The container element
  */
 function decorateSections(main) {
+  const tabsGroupSections = [];
   main.querySelectorAll(':scope > div').forEach((section) => {
     const wrappers = [];
     let defaultContent = false;
@@ -480,7 +564,12 @@ function decorateSections(main) {
       });
       sectionMeta.parentNode.remove();
     }
+
+    const isTabsGroup = section.classList.contains(SECTION_TYPE_TABS_GROUP);
+    if (isTabsGroup) tabsGroupSections.push(section);
   });
+
+  tabsGroupSections.forEach((tabsGroupSection) => decorateTabsGroupSection(tabsGroupSection));
 }
 
 /**
@@ -696,25 +785,6 @@ async function waitForLCP(lcpBlocks) {
       resolve();
     }
   });
-}
-
-function createElement(tagName, attributes, ...children) {
-  const el = document.createElement(tagName);
-  if (attributes) {
-    Object.keys(attributes).forEach((name) => {
-      el.setAttribute(name, attributes[name]);
-    });
-  }
-  children.forEach((child) => {
-    if (typeof child === 'string') {
-      el.appendChild(document.createTextNode(child));
-    } else if (Array.isArray(child)) {
-      child.forEach((c) => el.appendChild(c));
-    } else if (child) {
-      el.appendChild(child);
-    }
-  });
-  return el;
 }
 
 init();
