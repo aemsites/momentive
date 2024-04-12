@@ -175,7 +175,7 @@ a:hover {
 }
 
 /* buttons */
-a.button:any-link, button {
+a.button:any-link, button:not(.tab-link) {
   font-family: var(--body-font-family);
   display: inline-block;
   box-sizing: border-box;
@@ -293,4 +293,27 @@ main .section.navy, .section.plain-hero {
   margin: auto;
   margin-top: 0.25em;
   background-color: var(--orange);
+}
+
+/* Style the tab */
+.tabs-group .tabs {
+  overflow: hidden;
+  max-width: fit-content;
+  max-height: fit-content;
+}
+
+/* Style the buttons inside the tab */
+.tabs-group .tabs button {
+  background-color: white;
+  border: transparent;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+  border-top-right-radius: 12px;
+}
+
+/* Create an active/current tablink class */
+.tabs-group .tabs button.active {
+  background-color: var(--navy-blue);
+  color: white;
 }
