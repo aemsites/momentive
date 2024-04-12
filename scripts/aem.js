@@ -473,55 +473,69 @@ function openSelectedTab(tagsGroupSection, tabId, tabName) {
 
   const tabButton = tagsGroupSection.querySelector(`#${tabId}`);
   tabButton.classList.add('active');
-  const tabContent = tagsGroupSection.querySelector(`[data-tab-name="${tabName}"]`);
-  tabContent.style.display = 'block';
+  const selectedTabContents = tagsGroupSection.querySelectorAll(`[data-tab-name="${tabName}"]`);
+  selectedTabContents.forEach((tabContent) => {
+    tabContent.style.display = 'block';
+  });
 }
 
 function createTabButton(tabName, tagsGroupSection) {
-  const tabButtonId = tabName.replace(/\s/g, '-');
+  const tabButtonId = tabName.toLowerCase().replace(/\s/g, '-');
   const tabButton = createElement('button', { id: tabButtonId, class: 'tab-link' });
   tabButton.textContent = tabName;
   tabButton.addEventListener('click', () => openSelectedTab(tagsGroupSection, tabButton.id, tabName));
   return tabButton;
 }
 
+function createTabs(tagsGroupSection) {
+  const tabs = createElement('div', { class: 'tabs' });
+  const tabNamesAttr = tagsGroupSection.getAttribute('data-tab-names');
+  const tabNames = tabNamesAttr.split(',').map((name) => name.trim());
+  if (tabNames.length === 0) return [];
+  for (let i = 0; i < tabNames.length; i += 1) {
+    const tabName = tabNames[i].trim();
+    const tabButton = createTabButton(tabName, tagsGroupSection);
+    if (i === 0) tabButton.classList.add('active');
+    tabs.append(tabButton);
+  }
+  tagsGroupSection.append(tabs);
+  return tabNames;
+}
+
 /**
  * Decorates a tabs group section.
- * It moves the immediate 'N' sibling sections under the tabs group section.
+ * It moves the sibling sections having tab content under the tabs group section.
  * It creates tab buttons and sets up event listeners to switch the tab & tab content.
  * It also applies the necessary styling to the tabs section.
  *
  * @param {HTMLElement} tagsGroupSection - Tabs group section to be enhanced.
  */
 function decorateTabsGroupSection(tagsGroupSection) {
-  const tabCount = Number(tagsGroupSection.getAttribute('data-count')) || 0;
-  if (tabCount === 0) return;
+  const tabNames = createTabs(tagsGroupSection);
+  if (tabNames.length === 0) return;
 
+  // Find total sections to be moved under the tabs group section
+  let totalTabContentSections = 0;
+  tabNames.forEach((tabName) => {
+    const tabContentSections = document.querySelectorAll(`[data-tab-name="${tabName}"]`) || [];
+    totalTabContentSections += tabContentSections.length;
+  });
+
+  // Move tab content sections under the tabs group section
   const tabContents = [];
-  const tabButtons = [];
   let currentSection = tagsGroupSection;
-
-  for (let i = 0; i < tabCount; i += 1) {
+  for (let i = 0; i < totalTabContentSections; i += 1) {
     const tabContent = currentSection.nextElementSibling;
     if (!tabContent || tabContent.tagName !== 'DIV' || !tabContent.classList.contains(SECTION_TYPE_TAB_CONTENT)) {
       break;
     }
-
-    const tabName = tabContent.getAttribute('data-tab-name') || `Tab ${i + 1}`;
-    const tabButton = createTabButton(tabName, tagsGroupSection);
-
-    if (i === 0) {
-      tabContent.style.display = 'block';
-      tabButton.classList.add('active');
-    }
-
-    tabButtons.push(tabButton);
+    const tabName = tabContent.getAttribute('data-tab-name');
+    if (tabName === tabNames[0]) tabContent.style.display = 'block';
     tabContents.push(tabContent);
     currentSection = tabContent;
   }
 
-  const tabButtonsWrapper = createElement('div', { class: 'tabs' }, ...tabButtons);
-  tagsGroupSection.append(tabButtonsWrapper, ...tabContents);
+  tagsGroupSection.append(...tabContents);
 }
 
 /**
